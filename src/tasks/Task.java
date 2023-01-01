@@ -1,14 +1,16 @@
 package tasks;
 
 public class Task {
+
+    protected int id;
     protected String name;
     protected String description;
-    public int idnumber;
     protected String status;
-    public Task(String name, String description, int idnumber, String status){
+
+    public Task(String name, String description, int id, String status){
         this.name = name;
         this.description = description;
-        this.idnumber = idnumber;
+        this.id = id;
         this.status = status;
     }
     @Override

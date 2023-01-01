@@ -1,4 +1,5 @@
 import manager.Manager;
+import tasks.Epic;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,15 +13,15 @@ public class Main {
         manager.createSubTask("Подзадача №2", "ОписаниеПодзадача №2", 3);
         manager.createEpic("Эпик №2", "ОписаниеЭпик №2");
         manager.createSubTask("Подзадача №3", "ОписаниеПодзадача №3", 6);
-        System.out.println(manager.epics);
-        System.out.println(manager.tasks);
-        System.out.println(manager.subTasks);
-        manager.updateStatusOfEpic(manager.epics.get(3));
-        System.out.println(manager.epics);
+        System.out.println(manager.getEpics());
+        System.out.println(manager.getTasks());
+        System.out.println(manager.getSubtasks());
+        manager.updateStatusOfEpic((Epic) manager.getEpics().get(3));
+        System.out.println(manager.getEpics());
         manager.deleteSubTaskById(7);
         manager.changeStatusSubtasktoDone(5);
-        System.out.println(manager.epics);
-        System.out.println(manager.tasks);
-        System.out.println(manager.subTasks);
+        System.out.println(manager.getEpics());
+        System.out.println(manager.getTasks());
+        System.out.println(manager.getSubtasks());
     }
 }
