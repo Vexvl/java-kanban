@@ -2,6 +2,7 @@ package manager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import tasks.Epic;
 import tasks.Task;
 import tasks.Subtask;
@@ -76,7 +77,7 @@ public class Manager {
         return epics.get(id);
     }
 
-    public ArrayList getAllSubTasksByEpic(Epic epic){
+    public ArrayList getAllSubTasksByEpic(Epic epic) {
         return epic.getArraySubtasks();
     }
 
@@ -97,34 +98,37 @@ public class Manager {
             tasks.put(id, subtask);
         }
     }
-    public void updateStatusOfEpic(Epic epic){
-        if (epic.getArraySubtasks().isEmpty() == true){
+
+    public void updateStatusOfEpic(Epic epic) {
+        if (epic.getArraySubtasks().isEmpty() == true) {
             epic.setEpicStatus("NEW");
-        }
-        else if (!epic.getArraySubtasks().isEmpty()){
+        } else if (!epic.getArraySubtasks().isEmpty()) {
             int doneTask = 0;
             int toDoTask = subTasks.size();
-            for (Subtask subtask : epic.subtasks){
-                if (subtask.getStatusSubtask().equals("DONE")){
+            for (Subtask subtask : epic.getArrayOfSubtasksByEpic()) {
+                if (subtask.getStatusSubtask().equals("DONE")) {
                     doneTask++;
                 }
             }
-            if(doneTask==toDoTask){
+            if (doneTask == toDoTask) {
                 epic.setEpicStatus("DONE");
-            }
-            else epic.setEpicStatus("IN PROGRESS");
+            } else epic.setEpicStatus("IN PROGRESS");
         }
     }
-    public void changeStatusSubtasktoDone(int id){
+
+    public void changeStatusSubtasktoDone(int id) {
         subTasks.get(id).setStatusSubtask("DONE");
     }
-    public HashMap getEpics(){
+
+    public HashMap getEpics() {
         return epics;
     }
-    public HashMap getSubtasks(){
+
+    public HashMap getSubtasks() {
         return subTasks;
     }
-    public HashMap getTasks(){
+
+    public HashMap getTasks() {
         return tasks;
     }
 }
