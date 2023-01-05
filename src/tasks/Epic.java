@@ -1,6 +1,6 @@
 package tasks;
 
-import managers.Status;
+import status.Status;
 
 import java.util.ArrayList;
 

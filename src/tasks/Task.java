@@ -1,6 +1,6 @@
 package tasks;
 
-import managers.Status;
+import status.Status;
 
 public class Task {
 

@@ -1,4 +1,4 @@
-package managers;
+package status;
 
 public enum Status {
     DONE,
