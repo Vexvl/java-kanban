@@ -1,10 +1,12 @@
 package tasks;
 
+import managers.Status;
+
 public class Subtask extends Task {
 
-    private int epicId;
+    private final int epicId;
 
-    public Subtask(String name, String description, int id, String status, int epicId) {
+    public Subtask(String name, String description, int id, Status status, int epicId) {
         super(name, description, id, status);
         this.name = name;
         this.description = description;
@@ -12,14 +14,21 @@ public class Subtask extends Task {
         this.status = status;
         this.epicId = epicId;
     }
+
     @Override
-    public String toString(){
+    public String toString() {
         return name + ", " + description + ", " + status;
     }
-    public String getStatusSubtask(){
+
+    public Status getStatusSubtask() {
         return status;
     }
-    public void setStatusSubtask(String status){
+
+    public void setStatusSubtask(Status status) {
         this.status = status;
+    }
+
+    public Integer getIdOfSubtask() {
+        return id;
     }
 }
