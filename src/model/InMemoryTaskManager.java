@@ -1,16 +1,16 @@
-package managers;
+package model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import status.Status;
 import tasks.Epic;
 import tasks.Task;
 import tasks.Subtask;
+import model.Status;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    protected int id = 1;
+    private int id = 1;
 
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
@@ -41,17 +41,17 @@ public class InMemoryTaskManager implements TaskManager {
         return subtask;
     }
 
-
+    @Override
     public HashMap getAllTasks() {
         return tasks;
     }
 
-
+    @Override
     public HashMap getAllEpics() {
         return epics;
     }
 
-
+    @Override
     public HashMap getAllSubTasks() {
         return subTasks;
     }
@@ -78,17 +78,17 @@ public class InMemoryTaskManager implements TaskManager {
         subTasks.clear();
     }
 
-
+    @Override
     public Task getTaskById(int id) {
         return tasks.get(id);
     }
 
-
+    @Override
     public Subtask getSubTaskById(int id) {
         return subTasks.get(id);
     }
 
-
+    @Override
     public Epic getEpicById(int id) {
         return epics.get(id);
     }
@@ -119,8 +119,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    @Override
-    public void updateStatusOfEpic(int id) {
+    private void updateStatusOfEpic(int id) {
         if (epics.get(id).getArraySubtasks().isEmpty() == true) {
             epics.get(id).setEpicStatus(Status.NEW);
         } else if (!epics.get(id).getArraySubtasks().isEmpty()) {
@@ -137,8 +136,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    @Override
-    public void changeStatusSubtasktoDone(int id) {
+    private void changeSubtaskStatus(int id, Status status) {
         subTasks.get(id).setStatusSubtask(Status.DONE);
     }
 
@@ -156,4 +154,5 @@ public class InMemoryTaskManager implements TaskManager {
     public Task getTask(int id) {
         return tasks.get(id);
     }
+
 }

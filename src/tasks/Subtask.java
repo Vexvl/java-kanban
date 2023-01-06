@@ -1,6 +1,6 @@
 package tasks;
 
-import status.Status;
+import model.Status;
 
 public class Subtask extends Task {
 

@@ -1,4 +1,4 @@
-package managers;
+package model;
 
 public class Managers {
     public static TaskManager getDefault() {

@@ -1,10 +1,11 @@
-package managers;
+package model;
 
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public interface TaskManager {
     Task createTask(String name, String description);
@@ -12,6 +13,12 @@ public interface TaskManager {
     Epic createEpic(String name, String description);
 
     Subtask createSubTask(String name, String description, int epicId);
+
+    HashMap getAllTasks();
+
+    HashMap getAllEpics();
+
+    HashMap getAllSubTasks();
 
     void deleteTaskById(int id);
 
@@ -21,6 +28,12 @@ public interface TaskManager {
 
     void deleteAll();
 
+    Task getTaskById(int id);
+
+    Subtask getSubTaskById(int id);
+
+    Epic getEpicById(int id);
+
     ArrayList getAllSubTasksByEpic(Epic epic);
 
     void updateTask(int id);
@@ -28,10 +41,6 @@ public interface TaskManager {
     void updateEpic(int id);
 
     void updateSubTask(int id);
-
-    void updateStatusOfEpic(int id);
-
-    void changeStatusSubtasktoDone(int id);
 
     Epic getEpic(int id);
 
