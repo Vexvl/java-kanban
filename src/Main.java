@@ -1,6 +1,6 @@
-import model.HistoryManager;
-import model.Managers;
-import model.TaskManager;
+import service.HistoryManager;
+import service.Managers;
+import service.TaskManager;
 
 public class Main {
     public static void main(String[] args) {

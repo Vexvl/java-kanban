@@ -1,11 +1,11 @@
-package model;
+package service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import tasks.Epic;
-import tasks.Task;
-import tasks.Subtask;
+import model.Epic;
+import model.Task;
+import model.Subtask;
 import model.Status;
 
 public class InMemoryTaskManager implements TaskManager {

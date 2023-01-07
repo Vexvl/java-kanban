@@ -1,6 +1,4 @@
-package tasks;
-
-import model.Status;
+package model;
 
 import java.util.ArrayList;
 
