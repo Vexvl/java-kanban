@@ -15,11 +15,6 @@ public class Epic extends Task {
         subtasks = new ArrayList<>();
     }
 
-    @Override
-    public String toString() {
-        return name + ", " + description + ", " + status;
-    }
-
     public ArrayList getArraySubtasks() {
         return subtasks;
     }

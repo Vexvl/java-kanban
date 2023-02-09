@@ -13,11 +13,6 @@ public class Subtask extends Task {
         this.epicId = epicId;
     }
 
-    @Override
-    public String toString() {
-        return name + ", " + description + ", " + status;
-    }
-
     public Status getStatusSubtask() {
         return status;
     }
@@ -28,5 +23,9 @@ public class Subtask extends Task {
 
     public Integer getIdOfSubtask() {
         return id;
+    }
+
+    public Integer getEpicIdOfSubtask() {
+        return epicId;
     }
 }
