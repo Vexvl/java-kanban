@@ -1,6 +1,3 @@
-import model.Epic;
-import model.Node;
-import model.Task;
 import service.HistoryManager;
 import service.Managers;
 import service.TaskManager;
@@ -12,17 +9,13 @@ public class Main {
         TaskManager taskManager = Managers.getDefault();
         HistoryManager historyManager = Managers.getDefaultHistory();
 
-        historyManager.addTask(taskManager.createTask("Задача№1", "ОписаниеЗадача№1"));
-        historyManager.addTask(taskManager.createTask("Задача№2", "ОписаниеЗадача№2"));
-        historyManager.addTask(taskManager.createEpic("Эпик1","ОписаниеЭпик1"));
-        historyManager.addTask(taskManager.createSubTask("Подзадача1","ОписаниеПодзадача2",3));
-        historyManager.addTask(taskManager.createSubTask("Подзадача1","ОписаниеПодзадача2",3));
-        historyManager.addTask(taskManager.createSubTask("Подзадача2","ОписаниеПодзадача2",3));
-        historyManager.addTask(taskManager.createSubTask("Подзадача3","ОписаниеПодзадача2",3));
-        historyManager.remove(3);
-        historyManager.removeNodeEpic(new Node<>(taskManager.getEpicById(3)));
-        historyManager.getHistory();
-
+        historyManager.add(taskManager.createTask("Задача№1", "ОписаниеЗадача№1"));
+        historyManager.add(taskManager.createTask("Задача№2", "ОписаниеЗадача№2"));
+        historyManager.add(taskManager.createEpic("Эпик1","ОписаниеЭпик1"));
+        historyManager.add(taskManager.createSubTask("Подзадача1","ОписаниеПодзадача2",3));
+        historyManager.add(taskManager.createSubTask("Подзадача2","ОписаниеПодзадача2",3));
+        historyManager.add(taskManager.createSubTask("Подзадача3","ОписаниеПодзадача2",3));
+        historyManager.add(taskManager.createEpic("Эпик2", "ОписаниеЭпик2"));
 
         System.out.println("test");
     }

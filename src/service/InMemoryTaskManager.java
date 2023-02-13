@@ -18,7 +18,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task createTask(String name, String description) {
-        Task task = new Task(name, description, id, Status.NEW);
+        Task task = new Task(name, description, id, Status.NEW, false);
         tasks.put(id, task);
         id++;
         return task;
@@ -26,7 +26,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic createEpic(String name, String description) {
-        Epic epic = new Epic(name, description, id, Status.NEW);
+        Epic epic = new Epic(name, description, id, Status.NEW, true);
         epics.put(id, epic);
         id++;
         return epic;
