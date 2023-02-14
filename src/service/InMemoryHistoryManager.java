@@ -8,21 +8,24 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     CustomLinkedList<Task> customLinkedList = new CustomLinkedList<>();
 
-    Map<Integer, CustomLinkedList<Task>.Node<Task>> nodesById = new HashMap<>();
-
     @Override
     public void add(Task task) {
-        customLinkedList.linkLast(task);
-        nodesById.put(task.getIdOfTask(), customLinkedList.tail);
+        customLinkedList.linkLast(task, task.getEpicId());
     }
 
     @Override
     public void remove(CustomLinkedList.Node node) {
-        customLinkedList.removeNode(node, nodesById);
+        customLinkedList.removeNode(node);
     }
 
     @Override
-    public ArrayList getHistory() {
-        return customLinkedList.getHistory(nodesById);
+    public List<Task> getHistory() {
+        return customLinkedList.getHistory();
     }
+
+    @Override
+    public CustomLinkedList.Node getNodeById(int id) {
+        return customLinkedList.getNodeById(id);
+    }
+
 }

@@ -10,7 +10,7 @@ import java.util.HashMap;
 public interface TaskManager {
     Task createTask(String name, String description);
 
-    Epic createEpic(String name, String description);
+    Epic createEpic(String name, String description, int epicId);
 
     Subtask createSubTask(String name, String description, int epicId);
 

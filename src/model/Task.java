@@ -7,7 +7,9 @@ public class Task {
     protected String description;
     protected Status status;
 
-    public Task(String name, String description, int id, Status status, boolean ifEpic) {
+    private int epicId;
+
+    public Task(String name, String description, int id, Status status) {
         this.name = name;
         this.description = description;
         this.id = id;
@@ -21,6 +23,10 @@ public class Task {
 
     public Integer getIdOfTask() {
         return id;
+    }
+
+    public Integer getEpicId(){
+        return epicId;
     }
 
 }

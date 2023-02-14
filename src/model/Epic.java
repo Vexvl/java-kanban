@@ -6,15 +6,15 @@ public class Epic extends Task {
 
     private ArrayList<Subtask> subtasks;
 
-    private boolean ifEpic;
+    private int epicId;
 
-    public Epic(String name, String description, int id, Status status, boolean ifEpic) {
-        super(name, description, id, status, ifEpic);
+    public Epic(String name, String description, int id, Status status, int epicId) {
+        super(name, description, id, status);
         this.name = name;
         this.description = description;
         this.id = id;
         this.status = status;
-        this.ifEpic = ifEpic;
+        this.epicId = epicId;
         subtasks = new ArrayList<>();
     }
 
@@ -33,8 +33,8 @@ public class Epic extends Task {
     public Integer getIdOfEpic() {
         return id;
     }
-
-    public Boolean getIfEpic(){
-        return ifEpic;
+    public Integer getEpicId(){
+        return epicId;
     }
+
 }
