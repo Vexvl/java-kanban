@@ -9,10 +9,11 @@ public class CustomLinkedList<Task> {
     private Node<Task> tail = null;
     private Map<Integer, Node<Task>> nodesById = new HashMap<>();
 
-    public void linkLast(Task task, int epicId, int idOfTask) {
+    public void linkLast(Task task, int epicId, int idOfTask, boolean ifSubtask) {
         Node<Task> oldTail = tail;
         Node<Task> newNode = new Node<>(tail, task, null);
         newNode.nodesEpicId = epicId;
+        newNode.ifSubtask = ifSubtask;
         nodesById.put(idOfTask, newNode);
         tail = newNode;
         if (oldTail == null)
@@ -22,7 +23,7 @@ public class CustomLinkedList<Task> {
     }
 
     public void removeNode(Node<Task> node) {
-        if (node.nodesEpicId != 0) {
+        if (node.nodesEpicId != 0 && node.ifSubtask == false) {
             for (Node<Task> value : nodesById.values()) {
                 if (value.nodesEpicId == node.nodesEpicId) {
                     idToRemoveFromHash.add(findKeyByNode(value));
@@ -68,6 +69,8 @@ public class CustomLinkedList<Task> {
     class Node<Task> {
 
         int nodesEpicId;// проверка по эпику
+
+        boolean ifSubtask;
         Task data;
         Node<Task> next;
         Node<Task> prev;

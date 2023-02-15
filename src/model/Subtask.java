@@ -4,6 +4,8 @@ public class Subtask extends Task {
 
     private int epicId;
 
+    private boolean ifSubtask = true;
+
     public Subtask(String name, String description, int id, Status status, int epicId) {
         super(name, description, id, status);
         this.name = name;
@@ -31,5 +33,8 @@ public class Subtask extends Task {
 
     public Integer getEpicId() {
         return epicId;
+    }
+    public Boolean getIfSubTask() {
+        return ifSubtask;
     }
 }

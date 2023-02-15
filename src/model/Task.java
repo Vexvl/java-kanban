@@ -7,6 +7,8 @@ public class Task {
     protected String description;
     protected Status status;
 
+    private Boolean ifSubtask = false;
+
     private int epicId;
 
     public Task(String name, String description, int id, Status status) {
@@ -25,8 +27,12 @@ public class Task {
         return id;
     }
 
-    public Integer getEpicId(){
+    public Integer getEpicId() {
         return epicId;
+    }
+
+    public Boolean getIfSubTask() {
+        return ifSubtask;
     }
 
 }
