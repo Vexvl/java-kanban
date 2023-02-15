@@ -18,8 +18,7 @@ public class Main {
         historyManager.add(taskManager.createSubTask("Подзадача3", "ОписаниеПодзадача2", 3));
         historyManager.add(taskManager.createEpic("Эпик2", "ОписаниеЭпик2", 7));
         historyManager.remove(historyManager.getNodeById(3));
+        System.out.println(historyManager.getHistory());
 
-
-        System.out.println("test");
     }
 }

@@ -1,19 +1,19 @@
 package service;
 
-import org.w3c.dom.Node;
-
 import java.util.*;
 
 public class CustomLinkedList<Task> {
 
     private Node<Task> head = null;
+
+    private ArrayList<Integer> idToRemoveFromHash = new ArrayList<>();
     private int id = 1;
     private Node<Task> tail = null;
     private Map<Integer, Node<Task>> nodesById = new HashMap<>();
 
     public void linkLast(Task task, int epicId) {
-        final Node<Task> oldTail = tail;
-        final Node<Task> newNode = new Node<>(tail, task, null);
+        Node<Task> oldTail = tail;
+        Node<Task> newNode = new Node<>(tail, task, null);
         newNode.nodeId = epicId;
         nodesById.put(id, newNode);
         id++;
@@ -28,14 +28,21 @@ public class CustomLinkedList<Task> {
         if (node.nodeId != 0) {
             for (Node<Task> value : nodesById.values()) {
                 if (value.nodeId == node.nodeId) {
-                   // nodesById.remove(findKeyByNode(value));почему-то не получается применить remove именно по конкретному значению из метода
-                    System.out.println(findKeyByNode(value));
+                    idToRemoveFromHash.add(findKeyByNode(value));
                 }
             }
+            removeFromHash(idToRemoveFromHash);
         } else nodesById.remove(findKeyByNode(node));
     }
 
-    public Integer findKeyByNode(Node<Task> node) {
+    private void removeFromHash(ArrayList<Integer> idToRemoveFromHash) {
+        for (Integer value : idToRemoveFromHash) {
+            nodesById.remove(value);
+        }
+        idToRemoveFromHash.clear();
+    }
+
+    private Integer findKeyByNode(Node<Task> node) {
 
         for (Integer key : nodesById.keySet()) {
             if (node.equals(nodesById.get(key))) {
@@ -73,6 +80,11 @@ public class CustomLinkedList<Task> {
             this.next = next;
             this.prev = prev;
 
+        }
+
+        @Override
+        public String toString() {
+            return data.toString();
         }
 
     }
