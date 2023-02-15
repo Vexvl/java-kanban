@@ -5,18 +5,15 @@ import java.util.*;
 public class CustomLinkedList<Task> {
 
     private Node<Task> head = null;
-
     private ArrayList<Integer> idToRemoveFromHash = new ArrayList<>();
-    private int id = 1;
     private Node<Task> tail = null;
     private Map<Integer, Node<Task>> nodesById = new HashMap<>();
 
-    public void linkLast(Task task, int epicId) {
+    public void linkLast(Task task, int epicId, int idOfTask) {
         Node<Task> oldTail = tail;
         Node<Task> newNode = new Node<>(tail, task, null);
-        newNode.nodeId = epicId;
-        nodesById.put(id, newNode);
-        id++;
+        newNode.nodesEpicId = epicId;
+        nodesById.put(idOfTask, newNode);
         tail = newNode;
         if (oldTail == null)
             head = newNode;
@@ -25,9 +22,9 @@ public class CustomLinkedList<Task> {
     }
 
     public void removeNode(Node<Task> node) {
-        if (node.nodeId != 0) {
+        if (node.nodesEpicId != 0) {
             for (Node<Task> value : nodesById.values()) {
-                if (value.nodeId == node.nodeId) {
+                if (value.nodesEpicId == node.nodesEpicId) {
                     idToRemoveFromHash.add(findKeyByNode(value));
                 }
             }
@@ -70,7 +67,7 @@ public class CustomLinkedList<Task> {
 
     class Node<Task> {
 
-        int nodeId;
+        int nodesEpicId;// проверка по эпику
         Task data;
         Node<Task> next;
         Node<Task> prev;
