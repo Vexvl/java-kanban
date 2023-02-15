@@ -23,7 +23,7 @@ public class CustomLinkedList<Task> {
     }
 
     public void removeNode(Node<Task> node) {
-        if (node.nodesEpicId != 0 && node.ifSubtask == false) {
+        if (node.nodesEpicId != 0 && !node.ifSubtask) {
             for (Node<Task> value : nodesById.values()) {
                 if (value.nodesEpicId == node.nodesEpicId) {
                     idToRemoveFromHash.add(findKeyByNode(value));
