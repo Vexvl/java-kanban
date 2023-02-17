@@ -1,5 +1,7 @@
 package model;
 
+import service.CustomLinkedList;
+
 public class Task {
 
     protected int id;
@@ -7,9 +9,9 @@ public class Task {
     protected String description;
     protected Status status;
 
-    private Boolean ifSubtask = false;
+    private Boolean isSubtask = false;
 
-    private int epicId;
+    private int epicId = 0;
 
     public Task(String name, String description, int id, Status status) {
         this.name = name;
@@ -31,8 +33,8 @@ public class Task {
         return epicId;
     }
 
-    public Boolean getIfSubTask() {
-        return ifSubtask;
+    public boolean isSubtask(){
+        return isSubtask;
     }
 
 }

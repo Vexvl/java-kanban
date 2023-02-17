@@ -2,6 +2,7 @@ package service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import model.Epic;
 import model.Task;
@@ -15,10 +16,12 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subTasks = new HashMap<>();
+    private List<Task> allTasks = new ArrayList<>();
 
     @Override
     public Task createTask(String name, String description) {
         Task task = new Task(name, description, id, Status.NEW);
+        allTasks.add(task);
         tasks.put(id, task);
         id++;
         return task;
@@ -27,6 +30,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic createEpic(String name, String description, int epicId) {
         Epic epic = new Epic(name, description, id, Status.NEW, epicId);
+        allTasks.add(epic);
         epics.put(id, epic);
         id++;
         return epic;
@@ -35,6 +39,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask createSubTask(String name, String description, int epicId) {
         Subtask subtask = new Subtask(name, description, id, Status.NEW, epicId);
+        allTasks.add(subtask);
         subTasks.put(id, subtask);
         epics.get(epicId).getArraySubtasks().add(subtask);
         id++;
@@ -111,6 +116,14 @@ public class InMemoryTaskManager implements TaskManager {
         if (tasks.containsKey(tasks.get(id))) {
             tasks.put(id, tasks.get(id));
         }
+    }
+
+    @Override
+    public Task getSimpleTask(int id){
+        if (allTasks.contains(id)) {
+            return allTasks.get(id);
+        }
+        return null;
     }
 
     @Override

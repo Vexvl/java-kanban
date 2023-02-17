@@ -5,15 +5,12 @@ import java.util.*;
 public class CustomLinkedList<Task> {
 
     private Node<Task> head = null;
-    private ArrayList<Integer> idToRemoveFromHash = new ArrayList<>();
     private Node<Task> tail = null;
     private Map<Integer, Node<Task>> nodesById = new HashMap<>();
 
-    public void linkLast(Task task, int epicId, int idOfTask, boolean ifSubtask) {
+    public void linkLast(Task task, int idOfTask) {
         Node<Task> oldTail = tail;
         Node<Task> newNode = new Node<>(tail, task, null);
-        newNode.nodesEpicId = epicId;
-        newNode.ifSubtask = ifSubtask;
         nodesById.put(idOfTask, newNode);
         tail = newNode;
         if (oldTail == null)
@@ -22,26 +19,26 @@ public class CustomLinkedList<Task> {
             oldTail.next = newNode;
     }
 
-    public void removeNode(Node<Task> node) {
-        if (node.nodesEpicId != 0 && !node.ifSubtask) {
+    public void removeNode(Node<Task> node, model.Task task) {
+        if (!node.isSubtask(task) && node.getEpicId(task) != 0) {
+            List<Integer> removeIds = new ArrayList<>();
             for (Node<Task> value : nodesById.values()) {
-                if (value.nodesEpicId == node.nodesEpicId) {
-                    idToRemoveFromHash.add(findKeyByNode(value));
+                if (value.getEpicId((model.Task) value.data) == task.getEpicId()) {
+                    removeIds.add(findKeyByNode(value));
                 }
             }
-            removeFromHash(idToRemoveFromHash);
+            removeFromHash(removeIds);
         } else nodesById.remove(findKeyByNode(node));
     }
 
-    private void removeFromHash(ArrayList<Integer> idToRemoveFromHash) {
-        for (Integer value : idToRemoveFromHash) {
+
+    private void removeFromHash(List<Integer> removeIds) {
+        for (Integer value : removeIds) {
             nodesById.remove(value);
         }
-        idToRemoveFromHash.clear();
     }
 
     private Integer findKeyByNode(Node<Task> node) {
-
         for (Integer key : nodesById.keySet()) {
             if (node.equals(nodesById.get(key))) {
                 return key;
@@ -66,11 +63,8 @@ public class CustomLinkedList<Task> {
     }
 
 
-    class Node<Task> {
+    public class Node<Task> {
 
-        int nodesEpicId;// проверка по эпику
-
-        boolean ifSubtask;
         Task data;
         Node<Task> next;
         Node<Task> prev;
@@ -79,12 +73,19 @@ public class CustomLinkedList<Task> {
             this.data = data;
             this.next = next;
             this.prev = prev;
-
         }
 
         @Override
         public String toString() {
             return data.toString();
+        }
+
+        public boolean isSubtask(model.Task task) {
+            return task.isSubtask();
+        }
+
+        public Integer getEpicId(model.Task task) {
+            return task.getEpicId();
         }
 
     }

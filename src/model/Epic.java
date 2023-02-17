@@ -8,7 +8,7 @@ public class Epic extends Task {
 
     private int epicId;
 
-    private boolean ifSubtask = false;
+    private boolean isSubtask = false;
 
 
     public Epic(String name, String description, int id, Status status, int epicId) {
@@ -40,8 +40,8 @@ public class Epic extends Task {
     public Integer getEpicId() {
         return epicId;
     }
-    public Boolean getIfSubTask(){
-        return ifSubtask;
+    public boolean isSubtask(){
+        return isSubtask;
     }
 
 }

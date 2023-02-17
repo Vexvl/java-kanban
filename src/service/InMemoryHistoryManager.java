@@ -10,12 +10,12 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        customLinkedList.linkLast(task, task.getEpicId(), task.getIdOfTask(), task.getIfSubTask());
+        customLinkedList.linkLast(task, task.getIdOfTask());
     }
 
     @Override
-    public void remove(CustomLinkedList.Node node) {
-        customLinkedList.removeNode(node);
+    public void remove(CustomLinkedList.Node node, Task task) {
+        customLinkedList.removeNode(node, task);
     }
 
     @Override

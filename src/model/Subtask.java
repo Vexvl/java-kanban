@@ -4,7 +4,7 @@ public class Subtask extends Task {
 
     private int epicId;
 
-    private boolean ifSubtask = true;
+    private boolean isSubtask = true;
 
     public Subtask(String name, String description, int id, Status status, int epicId) {
         super(name, description, id, status);
@@ -34,7 +34,7 @@ public class Subtask extends Task {
     public Integer getEpicId() {
         return epicId;
     }
-    public Boolean getIfSubTask() {
-        return ifSubtask;
+    public boolean isSubtask(){
+        return isSubtask;
     }
 }
