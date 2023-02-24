@@ -1,6 +1,7 @@
 package service;
 
 import model.Epic;
+import model.ManagerSaveException;
 import model.Subtask;
 import model.Task;
 
@@ -8,17 +9,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface TaskManager {
-    Task createTask(String name, String description);
 
-    Epic createEpic(String name, String description, int epicId);
+    void createTask(String name, String description) throws ManagerSaveException;
 
-    Subtask createSubTask(String name, String description, int epicId);
+    void createEpic(String name, String description) throws ManagerSaveException;
 
-    HashMap getAllTasks();
+    void createSubTask(String name, String description, int epicId) throws ManagerSaveException;
+
+    HashMap<Integer, Task> getEverything();
 
     HashMap getAllEpics();
 
     HashMap getAllSubTasks();
+
+    HashMap getAllTasks();
 
     void deleteTaskById(int id);
 
@@ -29,8 +33,6 @@ public interface TaskManager {
     void deleteAll();
 
     Task getTaskById(int id);
-
-    Task getSimpleTask(int id);
 
     Subtask getSubTaskById(int id);
 

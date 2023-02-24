@@ -49,8 +49,8 @@ public class CustomLinkedList<Task> {
 
     public List<Task> getHistory() {
         List<Node<Task>> tasks = new ArrayList<>();
-        for (Node<Task> task : nodesById.values()) {
-            tasks.add(task);
+        for (Node<Task> node : nodesById.values()) {
+            tasks.add(node);
         }
         return (List<Task>) tasks;
     }

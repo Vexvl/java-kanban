@@ -1,54 +1,52 @@
 package service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-import model.Epic;
-import model.Task;
-import model.Subtask;
-import model.Status;
+import model.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private int id = 1;
+    protected int id = 1;
 
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subTasks = new HashMap<>();
-    private List<Task> allTasks = new ArrayList<>();
+    private HashMap<Integer, Task> allTasks = new HashMap<>();
+
+    protected static HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
-    public Task createTask(String name, String description) {
+    public void createTask(String name, String description) throws ManagerSaveException {
         Task task = new Task(name, description, id, Status.NEW);
-        allTasks.add(task);
         tasks.put(id, task);
+        allTasks.put(id,task);
         id++;
-        return task;
     }
 
     @Override
-    public Epic createEpic(String name, String description, int epicId) {
-        Epic epic = new Epic(name, description, id, Status.NEW, epicId);
-        allTasks.add(epic);
+    public void createEpic(String name, String description) throws ManagerSaveException {
+        Epic epic = new Epic(name, description, id, Status.NEW);
         epics.put(id, epic);
+        allTasks.put(id,epic);
         id++;
-        return epic;
     }
 
     @Override
-    public Subtask createSubTask(String name, String description, int epicId) {
+    public void createSubTask(String name, String description, int epicId) throws ManagerSaveException {
         Subtask subtask = new Subtask(name, description, id, Status.NEW, epicId);
-        allTasks.add(subtask);
         subTasks.put(id, subtask);
+        allTasks.put(id,subtask);
         epics.get(epicId).getArraySubtasks().add(subtask);
         id++;
-        return subtask;
     }
 
+
     @Override
-    public HashMap getAllTasks() {
-        return tasks;
+    public HashMap<Integer, Task> getEverything(){
+        return allTasks;
     }
 
     @Override
@@ -57,9 +55,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public HashMap getAllTasks(){
+        return tasks;
+    }
+    @Override
     public HashMap getAllSubTasks() {
         return subTasks;
     }
+
 
     @Override
     public void deleteTaskById(int id) {
@@ -119,14 +122,6 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getSimpleTask(int id){
-        if (allTasks.contains(id)) {
-            return allTasks.get(id);
-        }
-        return null;
-    }
-
-    @Override
     public void updateEpic(int id) {
         if (tasks.containsKey(epics.get(id))) {
             tasks.put(id, epics.get(id));
@@ -161,6 +156,7 @@ public class InMemoryTaskManager implements TaskManager {
         subTasks.get(id).setStatusSubtask(Status.DONE);
     }
 
+
     @Override
     public Epic getEpic(int id) {
         return epics.get(id);
@@ -176,4 +172,7 @@ public class InMemoryTaskManager implements TaskManager {
         return tasks.get(id);
     }
 
+    protected static HistoryManager getHistoryManager() {
+        return historyManager;
+    }
 }

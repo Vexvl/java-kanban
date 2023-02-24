@@ -12,4 +12,5 @@ public interface HistoryManager {
     List<Task> getHistory();
 
     CustomLinkedList.Node getNodeById(int id);
+
 }

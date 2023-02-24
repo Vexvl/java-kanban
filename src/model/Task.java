@@ -1,13 +1,12 @@
 package model;
 
-import service.CustomLinkedList;
-
 public class Task {
 
     protected int id;
     protected String name;
     protected String description;
     protected Status status;
+    private Type type = Type.TASK;
 
     private Boolean isSubtask = false;
 
@@ -22,7 +21,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return name + ", " + description + ", " + status;
+        return id + "," + type + "," + name + "," + status + "," + description;
     }
 
     public Integer getIdOfTask() {
@@ -33,8 +32,12 @@ public class Task {
         return epicId;
     }
 
-    public boolean isSubtask(){
+    public boolean isSubtask() {
         return isSubtask;
     }
 
+
+    public Type getType() {
+        return type;
+    }
 }
