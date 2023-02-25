@@ -3,10 +3,12 @@ import service.HistoryManager;
 import service.Managers;
 import service.TaskManager;
 
+import java.io.IOException;
+
 
 public class Main {
 
-    public static void main(String[] args) throws ManagerSaveException {
+    public static void main(String[] args) throws ManagerSaveException, IOException {
 
         TaskManager taskManager = Managers.getDefault();
         HistoryManager historyManager = Managers.getDefaultHistory();

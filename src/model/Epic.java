@@ -10,7 +10,6 @@ public class Epic extends Task {
 
     private Type type = Type.EPIC;
 
-
     public Epic(String name, String description, int id, Status status) {
         super(name, description, id, status);
         this.name = name;
@@ -28,15 +27,16 @@ public class Epic extends Task {
         this.status = status;
     }
 
-    public ArrayList<Subtask> getArrayOfSubtasksByEpic() {
+    public ArrayList<Subtask> getSubtasks() {
         return subtasks;
     }
 
-    public Integer getIdOfEpic() {
+    public Integer getEpicId() {
         return id;
     }
-    public boolean isSubtask(){
-        return isSubtask;
+    @Override
+    public String toString() {
+        return id + "," + type + "," + name + "," + status + "," + description;
     }
 
 }

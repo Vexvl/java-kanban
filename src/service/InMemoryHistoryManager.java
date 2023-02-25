@@ -24,6 +24,11 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
+    public Map<Integer, CustomLinkedList<Task>.Node<Task>> getHistoryHash(){
+        return customLinkedList.getHistoryHash();
+    }
+
+    @Override
     public CustomLinkedList.Node getNodeById(int id) {
         return customLinkedList.getNodeById(id);
     }

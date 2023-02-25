@@ -32,11 +32,6 @@ public class Task {
         return epicId;
     }
 
-    public boolean isSubtask() {
-        return isSubtask;
-    }
-
-
     public Type getType() {
         return type;
     }

@@ -5,24 +5,25 @@ import model.ManagerSaveException;
 import model.Subtask;
 import model.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 public interface TaskManager {
 
-    void createTask(String name, String description) throws ManagerSaveException;
+    void createTask(String name, String description) throws ManagerSaveException, IOException;
 
-    void createEpic(String name, String description) throws ManagerSaveException;
+    void createEpic(String name, String description) throws ManagerSaveException, IOException;
 
-    void createSubTask(String name, String description, int epicId) throws ManagerSaveException;
+    void createSubTask(String name, String description, int epicId) throws ManagerSaveException, IOException;
 
-    HashMap<Integer, Task> getEverything();
+    Map<Integer, Task> getAllTypeTasks();
 
-    HashMap getAllEpics();
+    Map<Integer, Epic> getAllEpics();
 
-    HashMap getAllSubTasks();
+    Map<Integer, Subtask> getAllSubTasks();
 
-    HashMap getAllTasks();
+    Map<Integer, Task> getAllTasks();
 
     void deleteTaskById(int id);
 
@@ -38,7 +39,7 @@ public interface TaskManager {
 
     Epic getEpicById(int id);
 
-    ArrayList getAllSubTasksByEpic(Epic epic);
+    List<Subtask> getSubtasksByEpic(Epic epic);
 
     void updateTask(int id);
 

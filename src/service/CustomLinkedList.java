@@ -1,5 +1,7 @@
 package service;
 
+import model.Type;
+
 import java.util.*;
 
 public class CustomLinkedList<Task> {
@@ -20,7 +22,7 @@ public class CustomLinkedList<Task> {
     }
 
     public void removeNode(Node<Task> node, model.Task task) {
-        if (!node.isSubtask(task) && node.getEpicId(task) != 0) {
+        if (!node.getType(task).equals(Type.SUBTASK) && node.getEpicId(task) != 0) {
             List<Integer> removeIds = new ArrayList<>();
             for (Node<Task> value : nodesById.values()) {
                 if (value.getEpicId((model.Task) value.data) == task.getEpicId()) {
@@ -29,6 +31,10 @@ public class CustomLinkedList<Task> {
             }
             removeFromHash(removeIds);
         } else nodesById.remove(findKeyByNode(node));
+    }
+
+    public Map<Integer, Node<Task>> getNodesById() {
+        return nodesById;
     }
 
 
@@ -53,6 +59,10 @@ public class CustomLinkedList<Task> {
             tasks.add(node);
         }
         return (List<Task>) tasks;
+    }
+
+    public Map<Integer, Node<Task>> getHistoryHash() {
+        return nodesById;
     }
 
     public Node<Task> getNodeById(int id) {
@@ -80,8 +90,8 @@ public class CustomLinkedList<Task> {
             return data.toString();
         }
 
-        public boolean isSubtask(model.Task task) {
-            return task.isSubtask();
+        public Type getType(model.Task task) {
+            return task.getType();
         }
 
         public Integer getEpicId(model.Task task) {

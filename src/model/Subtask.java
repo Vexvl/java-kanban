@@ -35,9 +35,6 @@ public class Subtask extends Task {
     public Integer getEpicId() {
         return epicId;
     }
-    public boolean isSubtask(){
-        return isSubtask;
-    }
     public String getDescription(){
         return description;
     }
