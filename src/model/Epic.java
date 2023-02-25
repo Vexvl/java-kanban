@@ -1,12 +1,11 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Epic extends Task {
 
-    private ArrayList<Subtask> subtasks;
-
-    private boolean isSubtask = false;
+    private List<Subtask> subtasks;
 
     private Type type = Type.EPIC;
 
@@ -19,7 +18,7 @@ public class Epic extends Task {
         subtasks = new ArrayList<>();
     }
 
-    public ArrayList getArraySubtasks() {
+    public List<Subtask> getSubtasks() {
         return subtasks;
     }
 
@@ -27,13 +26,10 @@ public class Epic extends Task {
         this.status = status;
     }
 
-    public ArrayList<Subtask> getSubtasks() {
-        return subtasks;
-    }
-
-    public Integer getEpicId() {
+    public int getEpicId() {
         return id;
     }
+
     @Override
     public String toString() {
         return id + "," + type + "," + name + "," + status + "," + description;

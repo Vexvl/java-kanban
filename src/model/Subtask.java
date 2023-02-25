@@ -2,7 +2,7 @@ package model;
 
 public class Subtask extends Task {
 
-    private int epicId;
+    private final int epicId;
 
     private boolean isSubtask = true;
 
@@ -32,7 +32,7 @@ public class Subtask extends Task {
         return epicId;
     }
 
-    public Integer getEpicId() {
+    public int getEpicId() {
         return epicId;
     }
     public String getDescription(){

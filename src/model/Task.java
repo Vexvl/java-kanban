@@ -28,7 +28,7 @@ public class Task {
         return id;
     }
 
-    public Integer getEpicId() {
+    public int getEpicId() {
         return epicId;
     }
 

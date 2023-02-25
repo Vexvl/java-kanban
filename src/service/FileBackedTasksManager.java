@@ -9,17 +9,19 @@ import java.util.*;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
+    private static final String BASE_DIRECTORY = "/src/resources/";
+    private static final String DIR_TO_SRC = "/src/";
+    private static final String DIR_NAME = "resources";
+    private static final String FILE_NAME = "history.txt";
+
+    private static final int TYPE_INDEX = 1;
+    private static final int TASK_NAME_INDEX =2;
+    private static final int TASK_DESCRIPTION_INDEX = 4;
+    private static final int SUBTASK_EPICID_INDEX = 5;
+
     private File file;
 
     private List<Integer> history;
-
-    private static final String BASE_DIRECTORY = "/src/resources/";
-
-    private static final String DIR_TO_SRC = "/src/";
-
-    private static final String DIR_NAME = "resources";
-
-    private static final String FILE_NAME = "history.txt";
 
     public FileBackedTasksManager(File file) {
         this.file = file;
@@ -74,13 +76,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
 
     public Task fromString(String value) throws ManagerSaveException, IOException {
+
         String[] columns = value.split("\n");
         int columnsLength = columns.length;
         for (int i = 1; i < (columnsLength - 2); i++) {
             String[] taskFields = columns[i].split(",");
-            Type taskType = Type.valueOf((taskFields[1]));
-            String taskName = taskFields[2];
-            String taskDescription = taskFields[4];
+            Type taskType = Type.valueOf((taskFields[TYPE_INDEX]));
+            String taskName = taskFields[TASK_NAME_INDEX];
+            String taskDescription = taskFields[TASK_DESCRIPTION_INDEX];
             switch (taskType) {
                 case TASK:
                     createTask(taskName, taskDescription);
@@ -89,7 +92,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     createEpic(taskName, taskDescription);
                     break;
                 case SUBTASK:
-                    int epicId = Integer.parseInt(taskFields[5]);
+                    int epicId = Integer.parseInt(taskFields[SUBTASK_EPICID_INDEX]);
                     createSubTask(taskName, taskDescription, epicId);
                     break;
             }
@@ -99,8 +102,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     static List<Integer> historyFromString(String historyTextLine) {
+        List<Integer> historyTasksId = new ArrayList<>();
         try {
-            List<Integer> historyTasksId = new ArrayList<>();
             String[] taskIds = historyTextLine.split(",");
             for (String id : taskIds) {
                 historyTasksId.add(Integer.parseInt(id));
@@ -109,7 +112,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         } catch (NumberFormatException e) {
             System.out.println("Ошибка записи в историю");
         }
-        return null;
+        return new ArrayList<>(historyTasksId);
     }
 
     static String historyToString(HistoryManager manager) {
