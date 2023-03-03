@@ -1,8 +1,9 @@
 package service;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.*;
 
 import model.*;
 
@@ -10,6 +11,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     protected int id = 1;
 
+    private TreeSet<Task> orderedTasks = new TreeSet<>(new PriorityComparator<Task>());
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subTasks = new HashMap<>();
@@ -18,27 +20,27 @@ public class InMemoryTaskManager implements TaskManager {
     protected static HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
-    public void createTask(String name, String description) throws ManagerSaveException, IOException {
-        Task task = new Task(name, description, id, Status.NEW);
+    public void createTask(String name, String description, int minutesToDo, String startTime) throws ManagerSaveException, IOException {
+        Task task = new Task(name, description, id, Status.NEW, minutesToDo, startTime);
         tasks.put(id, task);
         allTasks.put(id,task);
         id++;
     }
 
     @Override
-    public void createEpic(String name, String description) throws ManagerSaveException, IOException {
-        Epic epic = new Epic(name, description, id, Status.NEW);
+    public void createEpic(String name, String description, int minutesToDo, String startTime) throws ManagerSaveException, IOException {
+        Epic epic = new Epic(name, description, id, Status.NEW, minutesToDo, startTime);
         epics.put(id, epic);
         allTasks.put(id,epic);
         id++;
     }
 
     @Override
-    public void createSubTask(String name, String description, int epicId) throws ManagerSaveException, IOException {
-        Subtask subtask = new Subtask(name, description, id, Status.NEW, epicId);
+    public void createSubTask(String name, String description, int epicId, int minutesToDo, String startTime) throws ManagerSaveException, IOException {
+        Subtask subtask = new Subtask(name, description, id, Status.NEW, epicId, minutesToDo, startTime);
         subTasks.put(id, subtask);
         allTasks.put(id,subtask);
-        //epics.get(epicId).getArraySubtasks().add(subtask);
+        epics.get(epicId).getSubtasks().add(subtask);
         id++;
     }
 
@@ -113,28 +115,7 @@ public class InMemoryTaskManager implements TaskManager {
         return epic.getSubtasks();
     }
 
-    @Override
-    public void updateTask(int id) {
-        if (tasks.containsKey(tasks.get(id))) {
-            tasks.put(id, tasks.get(id));
-        }
-    }
-
-    @Override
-    public void updateEpic(int id) {
-        if (tasks.containsKey(epics.get(id))) {
-            tasks.put(id, epics.get(id));
-        }
-    }
-
-    @Override
-    public void updateSubTask(int id) {
-        if (tasks.containsKey(subTasks.get(id))) {
-            tasks.put(id, subTasks.get(id));
-        }
-    }
-
-    private void updateStatusOfEpic(int id) {
+    public void updateStatusOfEpic(int id) {
         if (epics.get(id).getSubtasks().isEmpty() == true) {
             epics.get(id).setEpicStatus(Status.NEW);
         } else if (!epics.get(id).getSubtasks().isEmpty()) {
@@ -148,6 +129,27 @@ public class InMemoryTaskManager implements TaskManager {
             if (doneTask == toDoTask) {
                 epics.get(id).setEpicStatus(Status.DONE);
             } else epics.get(id).setEpicStatus(Status.IN_PROGRESS);
+        }
+    }
+
+    @Override
+    public void setDurationOfEpic(Epic epic) {
+        if (!epic.getSubtasks().isEmpty()) {
+            int sumOfDurationSubtasks = 0;
+            LocalDateTime minLocalDateTime = LocalDateTime.of(3000, Month.JANUARY, 1,1,1);
+            LocalDateTime maxLocalDateTime = LocalDateTime.of(1, Month.JANUARY, 1,1,1);
+            for (Subtask subtask : epic.getSubtasks()) {
+                sumOfDurationSubtasks += subtask.getMinutesToDo();
+                if (subtask.getLocalDateTime().isBefore(minLocalDateTime)){
+                    minLocalDateTime = subtask.getLocalDateTime();
+                }
+                if (subtask.getEndTime().plusMinutes(subtask.getMinutesToDo()).isAfter(maxLocalDateTime)){
+                    maxLocalDateTime = subtask.getEndTime();
+                }
+            }
+            epic.setStartTime(minLocalDateTime);
+            epic.setMinutesToDoOfEpic(sumOfDurationSubtasks);
+            epic.setEndTime(maxLocalDateTime);
         }
     }
 
@@ -173,5 +175,29 @@ public class InMemoryTaskManager implements TaskManager {
 
     protected static HistoryManager getHistoryManager() {
         return historyManager;
+    }
+
+    @Override
+    public TreeSet<Task> getPrioritizedTasks(){
+        for (Object task : getAllTasks().values()){
+            orderedTasks.add((Task) task);
+        }
+        for (Object epic : getAllEpics().values()){
+            orderedTasks.add((Task) epic);
+        }
+        for (Object subtask : getAllSubTasks().values()){
+            orderedTasks.add((Task) subtask);
+        }
+        return orderedTasks;
+    }
+
+
+    @Override
+    public boolean IfIntersection(Task task) throws IntersectionException {
+        if (task.getEndTime().isBefore(tasks.get(tasks.size()-1).setEndTime())){
+            tasks.remove(task.getIdOfTask());
+            throw new IntersectionException("Присутствует пересечение времени задач");
+        }
+        return false;
     }
 }

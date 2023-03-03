@@ -1,21 +1,20 @@
 package service;
 
-import model.Epic;
-import model.ManagerSaveException;
-import model.Subtask;
-import model.Task;
+import model.*;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public interface TaskManager {
 
-    void createTask(String name, String description) throws ManagerSaveException, IOException;
+    void createTask(String name, String description, int minutesToDo, String startTime) throws ManagerSaveException, IOException;
 
-    void createEpic(String name, String description) throws ManagerSaveException, IOException;
+    void createEpic(String name, String description, int minutesToDo, String startTime) throws ManagerSaveException, IOException;
 
-    void createSubTask(String name, String description, int epicId) throws ManagerSaveException, IOException;
+    void createSubTask(String name, String description, int epicId, int minutesToDo, String startTime) throws ManagerSaveException, IOException;
 
     Map<Integer, Task> getAllTypeTasks();
 
@@ -41,11 +40,7 @@ public interface TaskManager {
 
     List<Subtask> getSubtasksByEpic(Epic epic);
 
-    void updateTask(int id);
-
-    void updateEpic(int id);
-
-    void updateSubTask(int id);
+    void setDurationOfEpic(Epic epic);
 
     Epic getEpic(int id);
 
@@ -53,4 +48,8 @@ public interface TaskManager {
 
     Task getTask(int id);
 
+    TreeSet<Task> getPrioritizedTasks();
+
+
+    boolean IfIntersection(Task task) throws IntersectionException;
 }
