@@ -2,48 +2,57 @@ package model;
 
 import org.junit.jupiter.api.Test;
 import service.InMemoryTaskManager;
+import service.TaskManager;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EpicTest {
 
-    private Epic epic = new Epic("Эпик1", "ОписаниеЭпик1", 1, Status.NEW, 34, "2023-21-21");
-    private InMemoryTaskManager taskManager = new InMemoryTaskManager();
+    private TaskManager taskManager = new InMemoryTaskManager();
     @Test
-    public void ShallReturnNoSubtasks(){
-        assertNull(epic.getSubtasks());
+    public void ShallReturnNoSubtasks() throws ManagerSaveException, IOException {
+        taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
+        assertEquals(0,taskManager.getEpicById(1).getSubtasks().size());
     }
 
     @Test
-    public void StatusInProgressOfEpicWhenEverySubtaskIsNew(){
-        Subtask subtask = new Subtask("Подзадача1", "ОписаниеПодзадача1", 2, Status.NEW, 3,34, "1101-20-20");
-        Subtask subtask2 = new Subtask("Подзадача2", "ОписаниеПодзадача2", 3, Status.NEW, 3, 90, "2020-10-20");
-        taskManager.updateStatusOfEpic(1);
-        assertEquals(Status.NEW, epic.getEpicStatus(), "Статус не обновлён");
+    public void StatusInProgressOfEpicWhenEverySubtaskIsNew() throws ManagerSaveException, IOException {
+        taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
+        taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 3, "2029-12-21T21:21:21");
+        taskManager.createSubTask("Подзадача2", "ОписаниеПодзадача2", 1, 5, "2029-12-21T21:21:21");
+        taskManager.updateStatusOfEpic(taskManager.getEpic(1));
+        assertEquals(Status.IN_PROGRESS, taskManager.getEpicById(1).getEpicStatus(), "Статус не обновлён");
     }
 
     @Test
-    public void StatusDoneOfEpicWhenEverySubtaskIsDone(){
-        Subtask subtask = new Subtask("Подзадача1", "ОписаниеПодзадача1", 2, Status.DONE, 3, 11, "3003-30-30");
-        Subtask subtask2 = new Subtask("Подзадача2", "ОписаниеПодзадача2", 3, Status.DONE, 3, 95, "3032-30-30");
-        taskManager.updateStatusOfEpic(1);
-        assertEquals(Status.DONE, epic.getEpicStatus(), "Статус не обновлён");
+    public void StatusDoneOfEpicWhenEverySubtaskIsDone() throws ManagerSaveException, IOException {
+        taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
+        taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 3, "2029-12-21T21:21:21");
+        taskManager.createSubTask("Подзадача2", "ОписаниеПодзадача2", 1, 5, "2029-12-21T21:21:21");
+        taskManager.getSubTaskById(2).setStatusSubtask(Status.DONE);
+        taskManager.getSubTaskById(3).setStatusSubtask(Status.DONE);
+        taskManager.updateStatusOfEpic(taskManager.getEpic(1));
+        assertEquals(Status.DONE, taskManager.getEpicById(1).getEpicStatus(), "Статус не обновлён");
     }
 
     @Test
-    public void StatusInProgressOfEpic(){
-        Subtask subtask = new Subtask("Подзадача1", "ОписаниеПодзадача1", 2, Status.NEW, 3, 240, "2029-12-21T21:21:21");
-        Subtask subtask2 = new Subtask("Подзадача2", "ОписаниеПодзадача2", 3, Status.DONE, 3, 240, "2029-12-21T21:21:21");
-        taskManager.updateStatusOfEpic(1);
-        assertEquals(Status.IN_PROGRESS, epic.getEpicStatus(), "Статус не обновлён");
+    public void StatusInProgressOfEpic() throws ManagerSaveException, IOException {
+        taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
+        taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 3, "2029-12-21T21:21:21");
+        taskManager.createSubTask("Подзадача2", "ОписаниеПодзадача2", 1, 5, "2029-12-21T21:21:21");
+        taskManager.updateStatusOfEpic(taskManager.getEpic(1));
+        assertEquals(Status.IN_PROGRESS, taskManager.getEpicById(1).getEpicStatus(), "Статус не обновлён");
     }
 
     @Test
-    public void StatusOfEpicWhenEverySubtaskIsInProgress(){
-        Subtask subtask = new Subtask("Подзадача1", "ОписаниеПодзадача1", 2, Status.IN_PROGRESS, 3, 240, "2029-12-21T21:21:21");
-        Subtask subtask2 = new Subtask("Подзадача2", "ОписаниеПодзадача2", 3, Status.IN_PROGRESS, 3, 240, "2029-12-21T21:21:21");
-        taskManager.updateStatusOfEpic(1);
-        assertEquals(Status.IN_PROGRESS,epic.getEpicStatus(), "Статус не обновлён");
+    public void StatusOfEpicWhenEverySubtaskIsInProgress() throws ManagerSaveException, IOException {
+        taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
+        taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 3, "2029-12-21T21:21:21");
+        taskManager.createSubTask("Подзадача2", "ОписаниеПодзадача2", 1, 5, "2029-12-21T21:21:21");
+        taskManager.updateStatusOfEpic(taskManager.getEpic(1));
+        assertEquals(Status.IN_PROGRESS,taskManager.getEpicById(1).getEpicStatus(), "Статус не обновлён");
     }
 
 }

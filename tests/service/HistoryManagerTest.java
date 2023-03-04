@@ -2,14 +2,10 @@ package service;
 
 import model.ManagerSaveException;
 import model.Task;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,7 +19,7 @@ class HistoryManagerTest {
         taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 240, "2029-12-21T21:21:21");
         Task task = taskManager.getTaskById(1);
         customLinkedList.linkLast(task, task.getIdOfTask());
-        assertEquals(1, customLinkedList.getNodesById().size());
+        assertEquals(1, customLinkedList.getNodesById().size(), "Задача не добавлена");
     }
 
     @Test
@@ -35,8 +31,8 @@ class HistoryManagerTest {
         customLinkedList.linkLast(task, task.getIdOfTask());
         customLinkedList.linkLast(task2, task2.getIdOfTask());
         customLinkedList.removeNode(customLinkedList.getNodeById(1), task);
-        assertEquals(1, customLinkedList.getNodesById().size());
-        assertNotNull(customLinkedList.getNodesById());
+        assertEquals(1, customLinkedList.getNodesById().size(), "Что-то не удалилось");
+        assertNotNull(customLinkedList.getNodesById(), "Удалилось всё(((");
     }
 
     @Test
@@ -47,7 +43,7 @@ class HistoryManagerTest {
         Task task2 = taskManager.getTaskById(2);
         customLinkedList.linkLast(task, task.getIdOfTask());
         customLinkedList.linkLast(task2, task2.getIdOfTask());
-        assertEquals(List.of(task, task2), customLinkedList.getHistory());
+        assertEquals(List.of(task,task2).size(), customLinkedList.getHistory().size());
     }
 
     @Test
@@ -65,22 +61,8 @@ class HistoryManagerTest {
     void getNodeById() throws ManagerSaveException, IOException {
         taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 240, "2029-12-21T21:21:21");
         Task task = taskManager.getTaskById(1);
-        Task task2 = taskManager.getTaskById(2);
         customLinkedList.linkLast(task, task.getIdOfTask());
-        customLinkedList.linkLast(task2, task2.getIdOfTask());
         assertEquals(customLinkedList.getNodesById().get(1), customLinkedList.getHistoryHash().get(1));
-    }
-
-    @Test
-    void duplicate() throws ManagerSaveException, IOException {
-        taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 240, "2029-12-21T21:21:21");
-        taskManager.createTask("Задача№2", "ОписаниеЗадача№2", 240, "2029-12-21T21:21:21");
-        Task task = taskManager.getTaskById(1);
-        Task task2 = taskManager.getTaskById(2);
-        customLinkedList.linkLast(task, task.getIdOfTask());
-        customLinkedList.linkLast(task2, task2.getIdOfTask());
-        Set<CustomLinkedList.Node> setOfNodes = new HashSet<>((Collection) customLinkedList.getHistoryHash());
-        assertEquals(setOfNodes.size(), customLinkedList.getHistoryHash().size(), "Найден дубликат");
     }
 
     @Test

@@ -13,15 +13,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     private static final String DIR_TO_SCR = "/src/";
     private static final String DIR_NAME = "resources";
     private static final String BASE_DIRECTORY = "/src/resources/";
+
     private static final int TYPE_INDEX = 1;
     private static final int TASK_NAME_INDEX = 2;
     private static final int TASK_DESCRIPTION_INDEX = 4;
     private static final int SUBTASK_EPICID_INDEX = 5;
-
     private static final int TASK_MINUTES_TO_DO_INDEX = 6;
-
     private static final int TASK_START_TIME_INDEX = 7;
-    private static final int TASK_END_TIME_INDEX = 8;
 
     private File file;
 
@@ -38,8 +36,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void createEpic(String name, String description, int minutesToDo, String startTime) throws ManagerSaveException, IOException {
-        super.createEpic(name, description, minutesToDo, startTime);
+    public void createEpic(String name, String description) throws ManagerSaveException, IOException {
+        super.createEpic(name, description);
         save();
     }
 
@@ -59,11 +57,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             if (!Files.exists(Paths.get(BASE_DIRECTORY, FILE_NAME))) {
                 Files.createFile(Paths.get(BASE_DIRECTORY, FILE_NAME));
             }
+
             FileWriter fileWriter = new FileWriter(FILE_NAME);
             FileReader fileReader = new FileReader(FILE_NAME);
             BufferedReader br = new BufferedReader(fileReader);
             if (br.readLine() == null) {
-                fileWriter.write("id,type,name,status,description,epic,minutesToDo,startTime" + "\n");
+                fileWriter.write("id,type,name,status,description,epic,startTime,minutesToDo,endTime" + "\n");
             }
             for (Object task : getAllTypeTasks().values()) {
                 fileWriter.write(task.toString() + "\n");
@@ -93,7 +92,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     createTask(taskName, taskDescription, taskMinutesToDo, startTime);
                     break;
                 case EPIC:
-                    createEpic(taskName, taskDescription, taskMinutesToDo, startTime);
+                    createEpic(taskName, taskDescription);
                     break;
                 case SUBTASK:
                     int epicId = Integer.parseInt(taskFields[SUBTASK_EPICID_INDEX]);
@@ -124,7 +123,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         for (Integer id : manager.getHistoryHash().keySet()) {
             stringBuilder.append(id + ",");
         }
-        stringBuilder.deleteCharAt(stringBuilder.length());
         String ids = String.join(",", stringBuilder.toString());
         return ids;
     }
@@ -150,15 +148,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         FileBackedTasksManager.getHistoryManager().add(fileBackedTasksManager.getTask(1));
         fileBackedTasksManager.createTask("Задача№2", "ОписаниеЗадача№2", 67, "2025-12-21T21:21:21");
         FileBackedTasksManager.getHistoryManager().add(fileBackedTasksManager.getTask(2));
-        fileBackedTasksManager.createEpic("Эпик1", "ОписаниеЭпик1", 240, "2029-12-21T21:21:21");
+        fileBackedTasksManager.createEpic("Эпик1", "ОписаниеЭпик1");
         FileBackedTasksManager.getHistoryManager().add(fileBackedTasksManager.getEpic(3));
-        fileBackedTasksManager.createSubTask("Подзадача1", "ОписаниеПодзадача2", 3, 36, "2023-12-21T21:21:21");
+        fileBackedTasksManager.createSubTask("Подзадача1", "ОписаниеПодзадача2", 3, 36, "2056-12-21T21:21:21");
         FileBackedTasksManager.getHistoryManager().add(fileBackedTasksManager.getSubtask(4));
         fileBackedTasksManager.createSubTask("Подзадача2", "ОписаниеПодзадача2", 3, 90, "2042-12-21T21:21:21");
         FileBackedTasksManager.getHistoryManager().add(fileBackedTasksManager.getSubtask(5));
         fileBackedTasksManager.createSubTask("Подзадача3", "ОписаниеПодзадача3", 3, 99, "2078-12-21T21:21:21");
         FileBackedTasksManager.getHistoryManager().add(fileBackedTasksManager.getSubtask(6));
-        fileBackedTasksManager.createEpic("Эпик2", "ОписаниеЭпик2", 22, "2026-12-21T21:21:21");
+        fileBackedTasksManager.createEpic("Эпик2", "ОписаниеЭпик2");
         FileBackedTasksManager.getHistoryManager().add(fileBackedTasksManager.getEpic(7));
         fileBackedTasksManager.save();
         FileBackedTasksManager fileBackedTasksManager1 = loadFromFile(new File(FILE_NAME));

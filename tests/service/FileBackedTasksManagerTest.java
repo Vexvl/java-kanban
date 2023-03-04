@@ -26,14 +26,10 @@ class FileBackedTasksManagerTest {
     private static final int TASK_NAME_INDEX = 2;
     private static final int TASK_DESCRIPTION_INDEX = 4;
     private static final int SUBTASK_EPICID_INDEX = 5;
-
     private static final int TASK_MINUTES_TO_DO_INDEX = 6;
-
     private static final int TASK_START_TIME_INDEX = 7;
 
     private TaskManager taskManager = new InMemoryTaskManager();
-
-    private File file;
 
     private List<Integer> history;
 
@@ -42,8 +38,8 @@ class FileBackedTasksManagerTest {
         save();
     }
 
-    public void createEpic(String name, String description, int minutesToDo, String startTime) throws ManagerSaveException, IOException {
-        taskManager.createEpic(name, description, minutesToDo, startTime);
+    public void createEpic(String name, String description) throws ManagerSaveException, IOException {
+        taskManager.createEpic(name, description);
         save();
     }
 
@@ -103,7 +99,7 @@ class FileBackedTasksManagerTest {
                     createTask(taskName, taskDescription, taskMinutesToDo, startTime);
                     break;
                 case EPIC:
-                    createEpic(taskName, taskDescription, taskMinutesToDo, startTime);
+                    createEpic(taskName, taskDescription);
                     break;
                 case SUBTASK:
                     int epicId = Integer.parseInt(taskFields[SUBTASK_EPICID_INDEX]);

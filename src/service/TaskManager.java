@@ -12,7 +12,7 @@ public interface TaskManager {
 
     void createTask(String name, String description, int minutesToDo, String startTime) throws ManagerSaveException, IOException;
 
-    void createEpic(String name, String description, int minutesToDo, String startTime) throws ManagerSaveException, IOException;
+    void createEpic(String name, String description) throws ManagerSaveException, IOException;
 
     void createSubTask(String name, String description, int epicId, int minutesToDo, String startTime) throws ManagerSaveException, IOException;
 
@@ -40,7 +40,7 @@ public interface TaskManager {
 
     List<Subtask> getSubtasksByEpic(Epic epic);
 
-    void setDurationOfEpic(Epic epic);
+    void updateStatusOfEpic(Epic epic);
 
     Epic getEpic(int id);
 
@@ -50,6 +50,6 @@ public interface TaskManager {
 
     TreeSet<Task> getPrioritizedTasks();
 
-
     boolean IfIntersection(Task task) throws IntersectionException;
+
 }

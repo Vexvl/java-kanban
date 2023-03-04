@@ -2,7 +2,6 @@ package model;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Subtask extends Task {
@@ -24,7 +23,6 @@ public class Subtask extends Task {
         this.status = status;
         this.epicId = epicId;
         this.minutesToDo = minutesToDo;
-        this.duration = duration.ofMinutes(minutesToDo);
         this.startTime = LocalDateTime.parse(startTime);
         this.endTime = setEndTime();
     }
@@ -56,7 +54,7 @@ public class Subtask extends Task {
     }
     @Override
     public String toString() {
-        return id + "," + type + "," + name + "," + status + "," + description + "," + epicId + + duration.toMinutes() + "," + startTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + getEndTime().toString();
+        return id + "," + type + "," + name + "," + status + "," + description + "," + epicId + "," + startTime.toString() + "," + minutesToDo + "," +  getEndTime().toString();
     }
 
     @Override

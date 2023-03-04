@@ -2,6 +2,7 @@ package model;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,29 +14,46 @@ public class Epic extends Task {
 
     private Type type = Type.EPIC;
 
-    private Duration duration;
-
     private int minutesToDo;
 
     private LocalDateTime endTime;
 
     private LocalDateTime startTime;
 
-    public Epic(String name, String description, int id, Status status, int minutesToDo, String startTime) {
-        super(name, description, id, status, minutesToDo, startTime);
+    public Epic(String name, String description, int id, Status status) {
+        super(name, description, id, status);
         this.name = name;
         this.description = description;
         this.id = id;
         this.status = status;
         subtasks = new ArrayList<>();
-        this.startTime = LocalDateTime.parse(startTime);
-        this.endTime = setEndTime();
+        manageTime();
     }
 
     public void setMinutesToDoOfEpic(int minutesToDo){
          this.minutesToDo = minutesToDo;
-         duration = Duration.ofMinutes(minutesToDo);
     }
+
+    private void manageTime() {
+        if (!subtasks.isEmpty()) {
+            int sumOfDurationSubtasks = 0;
+            LocalDateTime minLocalDateTime = LocalDateTime.of(1, Month.JANUARY, 1,1,1,1);
+            LocalDateTime maxLocalDateTime = LocalDateTime.of(10000, Month.JANUARY, 1,1,1,1);
+            for (Subtask subtask : subtasks) {
+                sumOfDurationSubtasks += subtask.getMinutesToDo();
+                if (subtask.getLocalDateTime().isAfter(minLocalDateTime)){
+                    minLocalDateTime = subtask.getLocalDateTime();
+                }
+                if (subtask.getEndTime().plusMinutes(subtask.getMinutesToDo()).isBefore(maxLocalDateTime)){
+                    maxLocalDateTime = subtask.getEndTime().plusMinutes(subtask.getMinutesToDo());
+                }
+            }
+            setStartTime(minLocalDateTime);
+            setMinutesToDoOfEpic(sumOfDurationSubtasks);
+            setEndTime(maxLocalDateTime);
+        }
+    }
+
 
     public void setStartTime(LocalDateTime startTime){
         this.startTime = startTime;
@@ -64,7 +82,7 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return id + "," + type + "," + name + "," + status + "," + description + "," + minutesToDo + startTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + getEndTime().toString();
+        return id + "," + type + "," + name + "," + status + "," + description + "," + startTime.toString() + "," + minutesToDo + "," + endTime.toString();
     }
 
     @Override
