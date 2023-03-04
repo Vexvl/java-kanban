@@ -175,7 +175,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public boolean IfIntersection(Task task) throws IntersectionException {
-        if (task.getEndTime().isBefore(allTasks.get(task.getIdOfTask()-1).getEndTime())) {
+        if (task.getLocalDateTime().isBefore(allTasks.get(task.getIdOfTask()-1).getEndTime())) {
             throw new IntersectionException("Присутствует пересечение времени задач");
         }
         return false;
