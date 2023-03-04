@@ -22,30 +22,30 @@ class FileBackedTasksManagerTest extends TaskManagerTest {
     private static final String FILE_NAME = "history.txt";
     private static final String PATH = "src\\resources\\history.txt";
 
-    private TaskManager taskManager = new FileBackedTasksManager(new File(PATH));
+    private TaskManager fileManager = new FileBackedTasksManager(new File(PATH));
+    private TaskManager taskManager = new InMemoryTaskManager();
 
     @Test
     public void createTask() throws ManagerSaveException, IOException, ManagerReadException {
-        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(PATH));
-        fileBackedTasksManager.createTask("Задача№1", "ОписаниеЗадача№1", 30, "2021-12-21T21:21:21");
+        fileManager.createTask("Задача№1", "ОписаниеЗадача№1", 30, "2021-12-21T21:21:21");
         taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 30, "2021-12-21T21:21:21");
-        assertEquals(fileBackedTasksManager.getTaskById(1), taskManager.getTask(1));
+        assertEquals(fileManager.getTaskById(1), taskManager.getTask(1));
     }
 
     @Test
     public void createEpic() throws ManagerSaveException, IOException, ManagerReadException {
-        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(PATH));
-        fileBackedTasksManager.createEpic("Эпик1", "ОписаниеЭпик№1");
+        fileManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
-        assertEquals(taskManager.getEpic(1), fileBackedTasksManager.getEpic(1));
+        assertEquals(taskManager.getEpic(1), fileManager.getEpic(1));
     }
 
     @Test
     public void createSubtask() throws ManagerSaveException, IOException, ManagerReadException {
-        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(PATH));
-        fileBackedTasksManager.createEpic("Эпик1", "ОписаниеЭпик№1");
-        fileBackedTasksManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 3, "2056-12-21T21:21:21");
-        assertEquals(taskManager.getSubTaskById(1), fileBackedTasksManager.getSubtask(1));
+        fileManager.createEpic("Эпик1", "ОписаниеЭпик№1");
+        fileManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 3, "2056-12-21T21:21:21");
+        taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
+        taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 3, "2056-12-21T21:21:21");
+        assertEquals(taskManager.getSubTaskById(1), fileManager.getSubtask(1));
     }
 
     private void save() throws ManagerSaveException, IOException {
