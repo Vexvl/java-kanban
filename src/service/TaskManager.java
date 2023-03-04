@@ -48,7 +48,7 @@ public interface TaskManager {
 
     Task getTask(int id);
 
-    TreeSet<Task> getPrioritizedTasks();
+    Set<Task> getPrioritizedTasks();
 
     boolean IfIntersection(Task task) throws IntersectionException;
 

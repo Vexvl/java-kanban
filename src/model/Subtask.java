@@ -1,6 +1,5 @@
 package model;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -9,20 +8,19 @@ public class Subtask extends Task {
     private final int epicId;
 
     private boolean isSubtask = true;
-    private int minutesToDo;
+    private int duration;
 
     private LocalDateTime endTime;
-    private Duration duration;
     private LocalDateTime startTime;
     private Type type = Type.SUBTASK;
-    public Subtask(String name, String description, int id, Status status, int epicId, int minutesToDo, String startTime) {
-        super(name, description, id, status, minutesToDo, startTime);
+    public Subtask(String name, String description, int id, Status status, int epicId, int duration, String startTime) {
+        super(name, description, id, status, duration, startTime);
         this.name = name;
         this.description = description;
         this.id = id;
         this.status = status;
         this.epicId = epicId;
-        this.minutesToDo = minutesToDo;
+        this.duration = duration;
         this.startTime = LocalDateTime.parse(startTime);
         this.endTime = setEndTime();
     }
@@ -54,7 +52,7 @@ public class Subtask extends Task {
     }
     @Override
     public String toString() {
-        return id + "," + type + "," + name + "," + status + "," + description + "," + epicId + "," + startTime.toString() + "," + minutesToDo + "," +  getEndTime().toString();
+        return id + "," + type + "," + name + "," + status + "," + description + "," + epicId + "," + startTime.toString() + "," + duration + "," +  getEndTime().toString();
     }
 
     @Override
@@ -67,7 +65,7 @@ public class Subtask extends Task {
         }
         Subtask subtask = (Subtask) obj;
 
-        return Objects.equals(name, subtask.name) && Objects.equals(description, subtask.description) && Objects.equals(id, subtask.id) && Objects.equals(type, subtask.type) && Objects.equals(status, subtask.status) && Objects.equals(minutesToDo, subtask.minutesToDo)&& Objects.equals(startTime, subtask.startTime) && Objects.equals(endTime, subtask.endTime) && Objects.equals(epicId, subtask.epicId);
+        return Objects.equals(name, subtask.name) && Objects.equals(description, subtask.description) && Objects.equals(id, subtask.id) && Objects.equals(type, subtask.type) && Objects.equals(status, subtask.status) && Objects.equals(duration, subtask.duration)&& Objects.equals(startTime, subtask.startTime) && Objects.equals(endTime, subtask.endTime) && Objects.equals(epicId, subtask.epicId);
 
     }
 }

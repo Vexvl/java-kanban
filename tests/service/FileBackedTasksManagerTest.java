@@ -2,58 +2,51 @@ package service;
 
 import model.ManagerReadException;
 import model.ManagerSaveException;
-import model.Task;
-import model.Type;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static service.FileBackedTasksManager.historyToString;
+import static service.FileBackedTasksManager.loadFromFile;
 import static service.InMemoryTaskManager.getHistoryManager;
 
-class FileBackedTasksManagerTest {
+class FileBackedTasksManagerTest extends TaskManagerTest {
 
     private static final String BASE_DIRECTORY = "/src/resources/";
     private static final String DIR_TO_SRC = "/src/";
     private static final String DIR_NAME = "resources";
     private static final String FILE_NAME = "history.txt";
 
-    private static final int TYPE_INDEX = 1;
-    private static final int TASK_NAME_INDEX = 2;
-    private static final int TASK_DESCRIPTION_INDEX = 4;
-    private static final int SUBTASK_EPICID_INDEX = 5;
-    private static final int TASK_MINUTES_TO_DO_INDEX = 6;
-    private static final int TASK_START_TIME_INDEX = 7;
-
-    private TaskManager taskManager = new InMemoryTaskManager();
+    private TaskManager taskManager = new FileBackedTasksManager(new File(FILE_NAME));
 
     private List<Integer> history;
 
-    public void createTask(String name, String description, int minutesToDo, String startTime) throws ManagerSaveException, IOException {
-        taskManager.createTask(name, description, minutesToDo, startTime);
-        save();
+    @Test
+    public void createTask() throws ManagerSaveException, IOException, ManagerReadException {
+        taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 22, "2026-12-21T21:21:21");
+        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(FILE_NAME));
+        assertEquals(taskManager.getTaskById(1), fileBackedTasksManager.getTask(1));
     }
 
-    public void createEpic(String name, String description) throws ManagerSaveException, IOException {
-        taskManager.createEpic(name, description);
-        save();
+    @Test
+    public void createEpic() throws ManagerSaveException, IOException, ManagerReadException {
+        taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
+        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(FILE_NAME));
+        assertEquals(taskManager.getEpicById(1), fileBackedTasksManager.getEpic(1));
     }
 
-    public void createSubTask(String name, String description, int epicId, int minutesToDo, String startTime) throws ManagerSaveException, IOException {
-        taskManager.createSubTask(name, description, epicId, minutesToDo, startTime);
-        save();
+    @Test
+    public void createSubtask() throws ManagerSaveException, IOException, ManagerReadException {
+        taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 22, "2026-12-21T21:21:21");
+        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(FILE_NAME));
+        assertEquals(taskManager.getSubTaskById(1), fileBackedTasksManager.getSubtask(1));
     }
 
-    public List<Integer> getHistory() {
-        return history;
-    }
-
-
-    public void save() throws ManagerSaveException, IOException {
+    private void save() throws ManagerSaveException, IOException {
 
         try {
 
@@ -82,73 +75,6 @@ class FileBackedTasksManagerTest {
         }
     }
 
-
-    public Task fromString(String value) throws ManagerSaveException, IOException {
-
-        String[] columns = value.split("\n");
-        int columnsLength = columns.length;
-        for (int i = 1; i < (columnsLength - 2); i++) {
-            String[] taskFields = columns[i].split(",");
-            Type taskType = Type.valueOf((taskFields[TYPE_INDEX]));
-            String taskName = taskFields[TASK_NAME_INDEX];
-            String taskDescription = taskFields[TASK_DESCRIPTION_INDEX];
-            int taskMinutesToDo = Integer.parseInt(taskFields[TASK_MINUTES_TO_DO_INDEX]);
-            String startTime = taskFields[TASK_START_TIME_INDEX];
-            switch (taskType) {
-                case TASK:
-                    createTask(taskName, taskDescription, taskMinutesToDo, startTime);
-                    break;
-                case EPIC:
-                    createEpic(taskName, taskDescription);
-                    break;
-                case SUBTASK:
-                    int epicId = Integer.parseInt(taskFields[SUBTASK_EPICID_INDEX]);
-                    createSubTask(taskName, taskDescription, epicId, taskMinutesToDo, startTime);
-                    break;
-            }
-        }
-        history = historyFromString(columns[columnsLength - 1]);
-        return null;
-    }
-
-    static List<Integer> historyFromString(String historyTextLine) {
-        List<Integer> historyTasksId = new ArrayList<>();
-        try {
-            String[] taskIds = historyTextLine.split(",");
-            for (String id : taskIds) {
-                historyTasksId.add(Integer.parseInt(id));
-            }
-            return historyTasksId;
-        } catch (NumberFormatException e) {
-            System.out.println("Ошибка записи в историю");
-        }
-        return new ArrayList<>(historyTasksId);
-    }
-
-    static String historyToString(HistoryManager manager) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Integer id : manager.getHistoryHash().keySet()) {
-            stringBuilder.append(id + ",");
-        }
-        stringBuilder.deleteCharAt(stringBuilder.length());
-        String ids = String.join(",", stringBuilder.toString());
-        return ids;
-    }
-
-    String readFile(File file) throws ManagerReadException {
-        try {
-            return Files.readString(file.toPath());
-        } catch (IOException e) {
-            throw new ManagerReadException("Прочитать файл не удалось");
-        }
-    }
-
-    static FileBackedTasksManager loadFromFile(File file) throws ManagerReadException, ManagerSaveException, IOException {
-        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
-        fileBackedTasksManager.fromString(fileBackedTasksManager.readFile(file));
-        return fileBackedTasksManager;
-    }
-
     @Test
     public void testEmptyTasks() throws ManagerReadException, ManagerSaveException, IOException {
         FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(FILE_NAME));
@@ -164,7 +90,7 @@ class FileBackedTasksManagerTest {
     @Test
     public void emptyHistory() throws ManagerReadException, ManagerSaveException, IOException {
         FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(FILE_NAME));
-        assertNull(getHistory().isEmpty());
+        assertNull(history.isEmpty());
     }
 
 }

@@ -6,9 +6,7 @@ import service.Managers;
 import service.TaskManager;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Set;
-import java.util.TreeSet;
 
 
 public class Main {
@@ -35,11 +33,10 @@ public class Main {
         taskManager.createSubTask("Подзадача3", "ОписаниеПодзадача3", 3, 99, "2078-12-21T21:21:21");
        // taskManager.IfIntersection(taskManager.getTask(6));
         historyManager.add(taskManager.getSubTaskById(6));
-        taskManager.createEpic("Эпик2", "ОписаниеЭпик2");
       //  taskManager.IfIntersection(taskManager.getTask(7));
         historyManager.add(taskManager.getEpic(7));
         historyManager.remove(historyManager.getNodeById(3), taskManager.getEpic(3));
-       TreeSet<Task> getPrioritizedTasks = taskManager.getPrioritizedTasks();
+        Set<Task> getPrioritizedTasks = taskManager.getPrioritizedTasks();
         System.out.println(historyManager.getHistory());
 
 

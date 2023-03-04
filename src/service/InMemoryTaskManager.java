@@ -9,11 +9,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     protected int id = 1;
 
-    private TreeSet<Task> orderedTasks = new TreeSet<>(new PriorityComparator<Task>());
-    private HashMap<Integer, Task> tasks = new HashMap<>();
-    private HashMap<Integer, Epic> epics = new HashMap<>();
-    private HashMap<Integer, Subtask> subTasks = new HashMap<>();
-    private HashMap<Integer, Task> allTasks = new HashMap<>();
+    private Set<Task> orderedTasks = new TreeSet<>(new PriorityComparator<Task>());
+    private Map<Integer, Task> tasks = new HashMap<>();
+    private Map<Integer, Epic> epics = new HashMap<>();
+    private Map<Integer, Subtask> subTasks = new HashMap<>();
+    private Map<Integer, Task> allTasks = new HashMap<>();
 
     protected static HistoryManager historyManager = Managers.getDefaultHistory();
 
@@ -39,28 +39,28 @@ public class InMemoryTaskManager implements TaskManager {
         subTasks.put(id, subtask);
         allTasks.put(id, subtask);
         epics.get(epicId).getSubtasks().add(subtask);
-        epics.put(epicId, epics.get(epicId));
+        epics.get(epicId).calculateDuration();
         id++;
     }
 
 
     @Override
-    public HashMap<Integer, Task> getAllTypeTasks() {
+    public Map<Integer, Task> getAllTypeTasks() {
         return allTasks;
     }
 
     @Override
-    public HashMap getAllEpics() {
+    public Map<Integer,Epic> getAllEpics() {
         return epics;
     }
 
     @Override
-    public HashMap getAllTasks() {
+    public Map<Integer,Task> getAllTasks() {
         return tasks;
     }
 
     @Override
-    public HashMap getAllSubTasks() {
+    public Map<Integer,Subtask> getAllSubTasks() {
         return subTasks;
     }
 
@@ -159,7 +159,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public TreeSet<Task> getPrioritizedTasks() {
+    public Set<Task> getPrioritizedTasks() {
         for (Object task : getAllTasks().values()) {
             orderedTasks.add((Task) task);
         }

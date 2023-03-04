@@ -156,7 +156,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         FileBackedTasksManager.getHistoryManager().add(fileBackedTasksManager.getSubtask(5));
         fileBackedTasksManager.createSubTask("Подзадача3", "ОписаниеПодзадача3", 3, 99, "2078-12-21T21:21:21");
         FileBackedTasksManager.getHistoryManager().add(fileBackedTasksManager.getSubtask(6));
-        fileBackedTasksManager.createEpic("Эпик2", "ОписаниеЭпик2");
         FileBackedTasksManager.getHistoryManager().add(fileBackedTasksManager.getEpic(7));
         fileBackedTasksManager.save();
         FileBackedTasksManager fileBackedTasksManager1 = loadFromFile(new File(FILE_NAME));

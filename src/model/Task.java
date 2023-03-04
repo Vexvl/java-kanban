@@ -1,11 +1,7 @@
 package model;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
-import java.util.Optional;
 
 public class Task  {
 
@@ -19,16 +15,16 @@ public class Task  {
     private LocalDateTime endTime;
 
     private Boolean isSubtask = false;
-    private int minutesToDo;
+    private int duration;
     private LocalDateTime startTime;
     private int epicId = 0;
 
-    public Task(String name, String description, int id, Status status, int minutesToDo, String startTime) {
+    public Task(String name, String description, int id, Status status, int duration, String startTime) {
         this.name = name;
         this.description = description;
         this.id = id;
         this.status = status;
-        this.minutesToDo = minutesToDo;
+        this.duration = duration;
         this.startTime = LocalDateTime.parse(startTime);
         this.endTime = setEndTime();
     }
@@ -43,7 +39,7 @@ public class Task  {
 
     @Override
     public String toString() {
-        return id + "," + type + "," + name + "," + status + "," + description + "," + startTime.toString() + "," + minutesToDo + "," +  getEndTime().toString();
+        return id + "," + type + "," + name + "," + status + "," + description + "," + startTime.toString() + "," + duration + "," +  getEndTime().toString();
     }
 
     public Integer getIdOfTask() {
@@ -58,8 +54,8 @@ public class Task  {
         return type;
     }
 
-    public int getMinutesToDo(){
-        return minutesToDo;
+    public int getDuration(){
+        return duration;
     }
 
     public LocalDateTime getLocalDateTime(){
@@ -68,7 +64,7 @@ public class Task  {
 
     public LocalDateTime getEndTime(){
         if (startTime != null){
-            LocalDateTime endTime = startTime.plusMinutes(minutesToDo);
+            LocalDateTime endTime = startTime.plusMinutes(duration);
             return endTime;
         }
       return LocalDateTime.now();
@@ -76,7 +72,7 @@ public class Task  {
 
     public LocalDateTime setEndTime(){
         if (startTime != null){
-            return startTime.plusMinutes(minutesToDo);
+            return startTime.plusMinutes(duration);
         }
         return LocalDateTime.now();
     }
@@ -91,7 +87,7 @@ public class Task  {
         }
         Task task = (Task) obj;
 
-        return Objects.equals(name, task.name) && Objects.equals(description, task.description) && Objects.equals(id, task.id) && Objects.equals(type, task.type) && Objects.equals(status, task.status) && Objects.equals(startTime, task.startTime) && Objects.equals(minutesToDo, task.minutesToDo) && Objects.equals(endTime, task.endTime);
+        return Objects.equals(name, task.name) && Objects.equals(description, task.description) && Objects.equals(id, task.id) && Objects.equals(type, task.type) && Objects.equals(status, task.status) && Objects.equals(startTime, task.startTime) && Objects.equals(duration, task.duration) && Objects.equals(endTime, task.endTime);
 
     }
 
