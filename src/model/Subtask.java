@@ -52,7 +52,7 @@ public class Subtask extends Task {
     }
     @Override
     public String toString() {
-        return id + "," + type + "," + name + "," + status + "," + description + "," + epicId + "," + startTime.toString() + "," + duration + "," +  getEndTime().toString();
+        return id + "," + type + "," + name + "," + status + "," + description + "," + epicId + "," + startTime + "," + duration + "," + endTime;
     }
 
     @Override

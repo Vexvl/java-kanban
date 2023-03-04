@@ -1,3 +1,0 @@
-id,type,name,status,description,epic,startTime,minutesToDo,endTime
-1,TASK,Задача№1,NEW,ОписаниеЗадача№1,2026-12-21T21:21:21,22,2026-12-21T21:43:21
-

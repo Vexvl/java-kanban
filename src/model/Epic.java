@@ -43,7 +43,7 @@ public class Epic extends Task {
             }
             startTime = minLocalDateTime;
             duration = sumOfDurationSubtasks;
-            endTime = maxLocalDateTime;
+            endTime = maxLocalDateTime.plusMinutes(sumOfDurationSubtasks);
         }
     }
 
@@ -65,7 +65,7 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return id + "," + type + "," + name + "," + status + "," + description + "," + startTime.toString() + "," + duration + "," + endTime.toString();
+        return id + "," + type + "," + name + "," + status + "," + description + "," + startTime + "," + duration + "," + endTime;
     }
 
     @Override

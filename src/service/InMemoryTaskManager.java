@@ -1,9 +1,9 @@
 package service;
 
+import model.*;
+
 import java.io.IOException;
 import java.util.*;
-
-import model.*;
 
 public class InMemoryTaskManager implements TaskManager {
 

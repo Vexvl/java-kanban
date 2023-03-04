@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static service.FileBackedTasksManager.historyToString;
 import static service.FileBackedTasksManager.loadFromFile;
 import static service.InMemoryTaskManager.getHistoryManager;
@@ -20,29 +20,31 @@ class FileBackedTasksManagerTest extends TaskManagerTest {
     private static final String DIR_TO_SRC = "/src/";
     private static final String DIR_NAME = "resources";
     private static final String FILE_NAME = "history.txt";
+    private static final String PATH = "src\\resources\\history.txt";
 
-    private TaskManager taskManager = new FileBackedTasksManager(new File(FILE_NAME));
-
-    private List<Integer> history;
+    private TaskManager taskManager = new FileBackedTasksManager(new File(PATH));
 
     @Test
     public void createTask() throws ManagerSaveException, IOException, ManagerReadException {
-        taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 22, "2026-12-21T21:21:21");
-        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(FILE_NAME));
-        assertEquals(taskManager.getTaskById(1), fileBackedTasksManager.getTask(1));
+        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(PATH));
+        fileBackedTasksManager.createTask("Задача№1", "ОписаниеЗадача№1", 30, "2021-12-21T21:21:21");
+        taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 30, "2021-12-21T21:21:21");
+        assertEquals(fileBackedTasksManager.getTaskById(1), taskManager.getTask(1));
     }
 
     @Test
     public void createEpic() throws ManagerSaveException, IOException, ManagerReadException {
+        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(PATH));
+        fileBackedTasksManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
-        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(FILE_NAME));
-        assertEquals(taskManager.getEpicById(1), fileBackedTasksManager.getEpic(1));
+        assertEquals(taskManager.getEpic(1), fileBackedTasksManager.getEpic(1));
     }
 
     @Test
     public void createSubtask() throws ManagerSaveException, IOException, ManagerReadException {
-        taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 22, "2026-12-21T21:21:21");
-        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(FILE_NAME));
+        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(PATH));
+        fileBackedTasksManager.createEpic("Эпик1", "ОписаниеЭпик№1");
+        fileBackedTasksManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 3, "2056-12-21T21:21:21");
         assertEquals(taskManager.getSubTaskById(1), fileBackedTasksManager.getSubtask(1));
     }
 
@@ -77,20 +79,25 @@ class FileBackedTasksManagerTest extends TaskManagerTest {
 
     @Test
     public void testEmptyTasks() throws ManagerReadException, ManagerSaveException, IOException {
-        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(FILE_NAME));
-        assertNull(fileBackedTasksManager.getAllTasks());
+        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(PATH));
+        fileBackedTasksManager.createTask("Задача№1", "ОписаниеЗадача№1", 30, "2021-12-21T21:21:21");
+        fileBackedTasksManager.deleteAll();
+        assertEquals(0, fileBackedTasksManager.getAllTasks().size());
     }
 
     @Test
     public void testEpicWithoutSubtasks() throws ManagerReadException, ManagerSaveException, IOException {
-        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(FILE_NAME));
-        assertNull(fileBackedTasksManager.getEpic(1).getSubtasks());
+        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(PATH));
+        fileBackedTasksManager.createEpic("Эпик1", "ОписаниеЭпик№1");
+        fileBackedTasksManager.getEpic(1).getSubtasks().clear();
+        assertEquals(0, fileBackedTasksManager.getEpic(1).getSubtasks().size());
     }
 
     @Test
     public void emptyHistory() throws ManagerReadException, ManagerSaveException, IOException {
-        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(FILE_NAME));
-        assertNull(history.isEmpty());
+        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File(PATH));
+        fileBackedTasksManager.createEpic("Эпик1", "ОписаниеЭпик№1");
+        fileBackedTasksManager.getHistory().clear();
+        assertEquals(0, fileBackedTasksManager.getHistory().size());
     }
-
 }

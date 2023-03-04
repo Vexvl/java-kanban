@@ -39,7 +39,7 @@ public class Task  {
 
     @Override
     public String toString() {
-        return id + "," + type + "," + name + "," + status + "," + description + "," + startTime.toString() + "," + duration + "," +  getEndTime().toString();
+        return id + "," + type + "," + name + "," + status + "," + description + "," + startTime + "," + duration + "," + endTime;
     }
 
     public Integer getIdOfTask() {

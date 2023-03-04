@@ -5,14 +5,16 @@ import model.Task;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class HistoryManagerTest {
 
     CustomLinkedList<Task> customLinkedList = new CustomLinkedList<>();
     private TaskManager taskManager = new InMemoryTaskManager();
+    private final HistoryManager historyManager = new InMemoryHistoryManager();
 
     @Test
     void add() throws ManagerSaveException, IOException {
@@ -84,23 +86,24 @@ class HistoryManagerTest {
         Task task = taskManager.getTaskById(1);
         Task task2 = taskManager.getTaskById(2);
         Task task3 = taskManager.getTaskById(3);
-        customLinkedList.linkLast(task, task.getIdOfTask());
-        customLinkedList.linkLast(task2, task2.getIdOfTask());
-        customLinkedList.linkLast(task3, task3.getIdOfTask());
+        historyManager.add(task);
+        historyManager.add(task2);
+        historyManager.add(task3);
+        double i = 1.00 / historyManager.getHistory().size();
         double randomInt = Math.random();
-        if (randomInt < 1 / customLinkedList.getHistoryHash().size()) {
-            customLinkedList.removeNode(customLinkedList.getNodeById(1), taskManager.getTask(1));
-            assertEquals(2, customLinkedList.getHistoryHash().size());
-            System.out.println("Удалено сначала");
+        if (randomInt < i) {
+            historyManager.remove(historyManager.getNodeById(1), task);
+            assertEquals(2, historyManager.getHistoryHash().size());
+            System.out.println("Удалено с начала");
         }
-        if (randomInt == 1 / customLinkedList.getHistoryHash().size()) {
-            customLinkedList.removeNode(customLinkedList.getNodeById(customLinkedList.getHistoryHash().size() / 2), taskManager.getTask(customLinkedList.getHistoryHash().size() / 2));
-            assertEquals(2, customLinkedList.getHistoryHash().size());
+        if (randomInt == i) {
+            historyManager.remove(historyManager.getNodeById(2), task2);
+            assertEquals(2, historyManager.getHistoryHash().size());
             System.out.println("Удалено из середины");
         }
-        if (randomInt > 1 / customLinkedList.getHistoryHash().size()) {
-            customLinkedList.removeNode(customLinkedList.getNodeById(customLinkedList.getHistoryHash().size()), taskManager.getTask(customLinkedList.getHistoryHash().size()));
-            assertEquals(2, customLinkedList.getHistoryHash().size());
+        if (randomInt > i) {
+            historyManager.remove(historyManager.getNodeById(3), task3);
+            assertEquals(2, historyManager.getHistoryHash().size());
             System.out.println("Удалено с конца");
         }
 
