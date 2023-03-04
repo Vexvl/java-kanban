@@ -9,7 +9,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class InMemoryTaskManagerTest<T extends TaskManagerTest> {
+class InMemoryTaskManagerTest extends TaskManagerTest {
 
     private TaskManager taskManager = new InMemoryTaskManager();
 
