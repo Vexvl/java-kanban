@@ -1,6 +1,6 @@
 package service;
 
-import model.ManagerSaveException;
+import exceptions.ManagerSaveException;
 import model.Task;
 import org.junit.jupiter.api.Test;
 

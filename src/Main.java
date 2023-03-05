@@ -1,5 +1,5 @@
-import model.IntersectionException;
-import model.ManagerSaveException;
+import exceptions.IntersectionException;
+import exceptions.ManagerSaveException;
 import model.Task;
 import service.HistoryManager;
 import service.Managers;

@@ -1,5 +1,8 @@
 package service;
 
+import comparators.PriorityComparator;
+import exceptions.IntersectionException;
+import exceptions.ManagerSaveException;
 import model.*;
 
 import java.io.IOException;

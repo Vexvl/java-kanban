@@ -1,7 +1,7 @@
 package service;
 
-import model.ManagerReadException;
-import model.ManagerSaveException;
+import exceptions.ManagerReadException;
+import exceptions.ManagerSaveException;
 import model.Task;
 import model.Type;
 

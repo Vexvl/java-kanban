@@ -1,4 +1,6 @@
-package model;
+package comparators;
+
+import model.Task;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;

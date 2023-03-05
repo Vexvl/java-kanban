@@ -1,7 +1,7 @@
 package service;
 
-import model.ManagerReadException;
-import model.ManagerSaveException;
+import exceptions.ManagerReadException;
+import exceptions.ManagerSaveException;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
