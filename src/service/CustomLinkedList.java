@@ -36,11 +36,6 @@ public class CustomLinkedList<Task> {
         } else nodesById.remove(findKeyByNode(node));
     }
 
-    public Map<Integer, Node<Task>> getNodesById() {
-        return nodesById;
-    }
-
-
     private void removeFromHash(List<Integer> removeIds) {
         for (Integer value : removeIds) {
             nodesById.remove(value);

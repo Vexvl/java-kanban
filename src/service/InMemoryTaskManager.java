@@ -3,14 +3,17 @@ package service;
 import comparators.PriorityComparator;
 import exceptions.IntersectionException;
 import exceptions.ManagerSaveException;
-import model.*;
+import model.Epic;
+import model.Status;
+import model.Subtask;
+import model.Task;
 
 import java.io.IOException;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    protected int id = 1;
+    private int id = 1;
 
     private Set<Task> orderedTasks = new TreeSet<>(new PriorityComparator<Task>());
     private Map<Integer, Task> tasks = new HashMap<>();
@@ -21,8 +24,8 @@ public class InMemoryTaskManager implements TaskManager {
     protected static HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
-    public void createTask(String name, String description, int minutesToDo, String startTime) throws ManagerSaveException, IOException {
-        Task task = new Task(name, description, id, Status.NEW, minutesToDo, startTime);
+    public void createTask(String name, String description, int duration, String startTime) throws ManagerSaveException, IOException {
+        Task task = new Task(name, description, id, Status.NEW, duration, startTime);
         tasks.put(id, task);
         allTasks.put(id, task);
         id++;
@@ -37,8 +40,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createSubTask(String name, String description, int epicId, int minutesToDo, String startTime) throws ManagerSaveException, IOException {
-        Subtask subtask = new Subtask(name, description, id, Status.NEW, epicId, minutesToDo, startTime);
+    public void createSubTask(String name, String description, int epicId, int duration, String startTime) throws ManagerSaveException, IOException {
+        Subtask subtask = new Subtask(name, description, id, Status.NEW, epicId, duration, startTime);
         subTasks.put(id, subtask);
         allTasks.put(id, subtask);
         epics.get(epicId).getSubtasks().add(subtask);

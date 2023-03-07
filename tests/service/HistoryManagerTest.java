@@ -1,10 +1,9 @@
 package service;
 
-import exceptions.ManagerSaveException;
+import model.Status;
 import model.Task;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,80 +11,58 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class HistoryManagerTest {
 
-    CustomLinkedList<Task> customLinkedList = new CustomLinkedList<>();
-    private TaskManager taskManager = new InMemoryTaskManager();
     private final HistoryManager historyManager = new InMemoryHistoryManager();
 
     @Test
-    void add() throws ManagerSaveException, IOException {
-        taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 240, "2029-12-21T21:21:21");
-        Task task = taskManager.getTaskById(1);
-        customLinkedList.linkLast(task, task.getIdOfTask());
-        assertEquals(1, customLinkedList.getNodesById().size(), "Задача не добавлена");
+    void shouldAddHistory() {
+        Task task = new Task("Задача№1", "ОписаниеЗадача№1", 1, Status.NEW, 1, "2029-12-21T21:21:21");
+        historyManager.add(task);
+        assertEquals(1, historyManager.getHistory().size(), "Задача не добавлена");
     }
 
     @Test
-    void remove() throws ManagerSaveException, IOException {
-        taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 240, "2029-12-21T21:21:21");
-        taskManager.createTask("Задача№2", "ОписаниеЗадача№2", 240, "2029-12-21T21:21:21");
-        Task task = taskManager.getTaskById(1);
-        Task task2 = taskManager.getTaskById(2);
-        customLinkedList.linkLast(task, task.getIdOfTask());
-        customLinkedList.linkLast(task2, task2.getIdOfTask());
-        customLinkedList.removeNode(customLinkedList.getNodeById(1), task);
-        assertEquals(1, customLinkedList.getNodesById().size(), "Что-то не удалилось");
-        assertNotNull(customLinkedList.getNodesById(), "Удалилось всё(((");
+    void shouldRemove() {
+        Task task = new Task("Задача№1", "ОписаниеЗадача№1", 1, Status.NEW, 1, "2029-12-21T21:21:21");
+        Task task2 = new Task("Задача№1", "ОписаниеЗадача№1", 2, Status.NEW, 1, "2029-12-21T21:21:21");
+        historyManager.add(task);
+        historyManager.add(task2);
+        historyManager.remove(historyManager.getNodeById(1), task);
+        assertEquals(1, historyManager.getHistory().size(), "Что-то не удалилось");
+        assertNotNull(historyManager.getHistory(), "Удалилось всё(((");
     }
 
     @Test
-    void getHistory() throws ManagerSaveException, IOException {
-        taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 240, "2029-12-21T21:21:21");
-        taskManager.createTask("Задача№2", "ОписаниеЗадача№2", 240, "2029-12-21T21:21:21");
-        Task task = taskManager.getTaskById(1);
-        Task task2 = taskManager.getTaskById(2);
-        customLinkedList.linkLast(task, task.getIdOfTask());
-        customLinkedList.linkLast(task2, task2.getIdOfTask());
-        assertEquals(List.of(task,task2).size(), customLinkedList.getHistory().size());
+    void shouldGetHistory() {
+        Task task = new Task("Задача№1", "ОписаниеЗадача№1", 1, Status.NEW, 1, "2029-12-21T21:21:21");
+        Task task2 = new Task("Задача№1", "ОписаниеЗадача№1", 2, Status.NEW, 1, "2029-12-21T21:21:21");
+        historyManager.add(task);
+        historyManager.add(task2);
+        assertEquals(List.of(task, task2).size(), historyManager.getHistory().size());
     }
 
     @Test
-    void getHistoryHash() throws ManagerSaveException, IOException {
-        taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 240, "2029-12-21T21:21:21");
-        taskManager.createTask("Задача№2", "ОписаниеЗадача№2", 240, "2029-12-21T21:21:21");
-        Task task = taskManager.getTaskById(1);
-        Task task2 = taskManager.getTaskById(2);
-        customLinkedList.linkLast(task, task.getIdOfTask());
-        customLinkedList.linkLast(task2, task2.getIdOfTask());
-        assertEquals(2, customLinkedList.getHistoryHash().size());
+    void shouldGetHistoryHash() {
+        Task task = new Task("Задача№1", "ОписаниеЗадача№1", 1, Status.NEW, 1, "2029-12-21T21:21:21");
+        Task task2 = new Task("Задача№1", "ОписаниеЗадача№1", 2, Status.NEW, 1, "2029-12-21T21:21:21");
+        historyManager.add(task);
+        historyManager.add(task2);
+        assertEquals(2, historyManager.getHistoryHash().size());
     }
 
     @Test
-    void getNodeById() throws ManagerSaveException, IOException {
-        taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 240, "2029-12-21T21:21:21");
-        Task task = taskManager.getTaskById(1);
-        customLinkedList.linkLast(task, task.getIdOfTask());
-        assertEquals(customLinkedList.getNodesById().get(1), customLinkedList.getHistoryHash().get(1));
+    void shouldReturnEmptyHistory() {
+        Task task = new Task("Задача№1", "ОписаниеЗадача№1", 1, Status.NEW, 1, "2029-12-21T21:21:21");
+        Task task2 = new Task("Задача№1", "ОписаниеЗадача№1", 2, Status.NEW, 1, "2029-12-21T21:21:21");
+        historyManager.add(task);
+        historyManager.add(task2);
+        assertNotNull(historyManager.getHistoryHash(), "История задач пустует");
     }
 
     @Test
-    void emptyHistory() throws ManagerSaveException, IOException {
-        taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 240, "2029-12-21T21:21:21");
-        taskManager.createTask("Задача№2", "ОписаниеЗадача№2", 240, "2029-12-21T21:21:21");
-        Task task = taskManager.getTaskById(1);
-        Task task2 = taskManager.getTaskById(2);
-        customLinkedList.linkLast(task, task.getIdOfTask());
-        customLinkedList.linkLast(task2, task2.getIdOfTask());
-        assertNotNull(customLinkedList.getHistoryHash(), "История задач пустует");
-    }
-
-    @Test
-    void deleteFromHistory() throws ManagerSaveException, IOException {
-        taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 240, "2029-12-21T21:21:21");
-        taskManager.createTask("Задача№2", "ОписаниеЗадача№2", 240, "2029-12-21T21:21:21");
-        taskManager.createTask("Задача№3", "ОписаниеЗадача№3", 240, "2029-12-21T21:21:21");
-        Task task = taskManager.getTaskById(1);
-        Task task2 = taskManager.getTaskById(2);
-        Task task3 = taskManager.getTaskById(3);
+    void shouldDeleteFromHistory() {
+        Task task = new Task("Задача№1", "ОписаниеЗадача№1", 1, Status.NEW, 1, "2029-12-21T21:21:21");
+        Task task2 = new Task("Задача№1", "ОписаниеЗадача№1", 2, Status.NEW, 1, "2029-12-21T21:21:21");
+        Task task3 = new Task("Задача№1", "ОписаниеЗадача№1", 3, Status.NEW, 1, "2029-12-21T21:21:21");
         historyManager.add(task);
         historyManager.add(task2);
         historyManager.add(task3);

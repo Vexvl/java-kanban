@@ -1,7 +1,11 @@
 package service;
 
 import exceptions.ManagerSaveException;
-import model.*;
+import model.Epic;
+import model.Status;
+import model.Subtask;
+import model.Task;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -10,9 +14,12 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class InMemoryTaskManagerTest extends TaskManagerTest {
+class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
-    private TaskManager taskManager = new InMemoryTaskManager();
+    @BeforeEach
+    public void setTaskManager() {
+        this.taskManager = new InMemoryTaskManager();
+    }
 
     @Test
     public void createTask() throws ManagerSaveException, IOException {

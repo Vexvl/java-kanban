@@ -2,7 +2,9 @@ package service;
 
 import exceptions.IntersectionException;
 import exceptions.ManagerSaveException;
-import model.*;
+import model.Epic;
+import model.Subtask;
+import model.Task;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,11 +13,11 @@ import java.util.Set;
 
 public interface TaskManager {
 
-    void createTask(String name, String description, int minutesToDo, String startTime) throws ManagerSaveException, IOException;
+    void createTask(String name, String description, int duration, String startTime) throws ManagerSaveException, IOException;
 
     void createEpic(String name, String description) throws ManagerSaveException, IOException;
 
-    void createSubTask(String name, String description, int epicId, int minutesToDo, String startTime) throws ManagerSaveException, IOException;
+    void createSubTask(String name, String description, int epicId, int duration, String startTime) throws ManagerSaveException, IOException;
 
     Map<Integer, Task> getAllTypeTasks();
 
