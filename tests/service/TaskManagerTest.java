@@ -11,17 +11,17 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-abstract class TaskManagerTest<T extends TaskManager> {
+public abstract class TaskManagerTest<T extends TaskManager> {
 
     protected TaskManager taskManager;
 
     @BeforeEach
-    public void setTaskManager() throws ManagerSaveException, IOException {
+    public void setTaskManager() {
         this.taskManager = new InMemoryTaskManager();
     }
 
     @Test
-    public void getAllTypeTasks() throws ManagerSaveException, IOException {
+    public void getAllTypeTasks() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 22, "2026-12-21T21:21:21");
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 2, 22, "2026-12-21T21:21:21");
@@ -29,8 +29,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(3, taskManager.getAllTypeTasks().size(), "Неверное количество задач");
     }
 
+
     @Test
-    public void getAllTypeTasksNull() throws ManagerSaveException, IOException {
+    public void getAllTypeTasksNull() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 22, "2026-12-21T21:21:21");
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 2, 22, "2026-12-21T21:21:21");
@@ -39,7 +40,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void getAllEpics() throws ManagerSaveException, IOException {
+    public void getAllEpics() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createEpic("Эпик2", "ОписаниеЭпик№2");
         assertNotNull(taskManager.getAllEpics(), "Эпики не возвращаются");
@@ -47,7 +48,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void getAllEpicsNull() throws ManagerSaveException, IOException {
+    public void getAllEpicsNull() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createEpic("Эпик2", "ОписаниеЭпик№2");
         taskManager.getAllEpics().clear();
@@ -55,7 +56,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void getAllSubTasks() throws ManagerSaveException, IOException {
+    public void getAllSubTasks() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 22, "2026-12-21T21:21:21");
         taskManager.createSubTask("Подзадача2", "ОписаниеПодзадача2", 1, 22, "2026-12-21T21:21:21");
@@ -64,7 +65,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void getAllSubTasksNull() throws ManagerSaveException, IOException {
+    public void getAllSubTasksNull() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 22, "2026-12-21T21:21:21");
         taskManager.createSubTask("Подзадача2", "ОписаниеПодзадача2", 1, 22, "2026-12-21T21:21:21");
@@ -73,7 +74,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void getAllTasks() throws ManagerSaveException, IOException {
+    public void getAllTasks() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 22, "2026-12-21T21:21:21");
         taskManager.createTask("Задача№2", "ОписаниеЗадача№2", 22, "2026-12-21T21:21:21");
         assertNotNull(taskManager.getAllTasks(), "Задачи не возвращаются");
@@ -81,7 +82,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void getAllTasksNull() throws ManagerSaveException, IOException {
+    public void getAllTasksNull() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 22, "2026-12-21T21:21:21");
         taskManager.createTask("Задача№2", "ОписаниеЗадача№2", 22, "2026-12-21T21:21:21");
         taskManager.getAllTasks().clear();
@@ -89,7 +90,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void deleteTaskById() throws ManagerSaveException, IOException {
+    public void deleteTaskById() throws ManagerSaveException, IOException, InterruptedException {
         int id = 1;
         taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 22, "2026-12-21T21:21:21");
         taskManager.createTask("Задача№2", "ОписаниеЗадача№2", 22, "2026-12-21T21:21:21");
@@ -99,7 +100,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void deleteTaskByWrongId() throws ManagerSaveException, IOException {
+    public void deleteTaskByWrongId() throws ManagerSaveException, IOException, InterruptedException {
         int id = 3;
         taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 22, "2026-12-21T21:21:21");
         taskManager.createTask("Задача№2", "ОписаниеЗадача№2", 22, "2026-12-21T21:21:21");
@@ -109,7 +110,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void deleteSubTaskById() throws ManagerSaveException, IOException {
+    public void deleteSubTaskById() throws ManagerSaveException, IOException, InterruptedException {
         int id = 1;
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 22, "2026-12-21T21:21:21");
@@ -120,7 +121,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void deleteSubTaskByWrongId() throws ManagerSaveException, IOException {
+    public void deleteSubTaskByWrongId() throws ManagerSaveException, IOException, InterruptedException {
         int id = 3;
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 22, "2026-12-21T21:21:21");
@@ -130,7 +131,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void deleteEpicById() throws ManagerSaveException, IOException {
+    public void deleteEpicById() throws ManagerSaveException, IOException, InterruptedException {
         int id = 1;
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createEpic("Эпик2", "ОписаниеЭпик№2");
@@ -140,7 +141,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void deleteEpicByWrongId() throws ManagerSaveException, IOException {
+    public void deleteEpicByWrongId() throws ManagerSaveException, IOException, InterruptedException {
         int id = 3;
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createEpic("Эпик2", "ОписаниеЭпик№2");
@@ -150,7 +151,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
 
     @Test
-    public void deleteAll() throws ManagerSaveException, IOException {
+    public void deleteAll() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 22, "2026-12-21T21:21:21");
         taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 22, "2026-12-21T21:21:21");
@@ -159,7 +160,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void getSubtasksByEpic() throws ManagerSaveException, IOException {
+    public void getSubtasksByEpic() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 22, "2026-12-21T21:21:21");
         taskManager.createSubTask("Подзадача2", "ОписаниеПодзадача2", 1, 22, "2026-12-21T21:21:21");
@@ -170,41 +171,40 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void getEpic() throws ManagerSaveException, IOException {
+    public void getEpic() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         assertEquals(taskManager.getEpic(1), taskManager.getAllEpics().get(1), "Эпики не совпадают");
     }
 
     @Test
-    public void getEpicByWrongId() throws ManagerSaveException, IOException {
+    public void getEpicByWrongId() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         assertNotEquals(taskManager.getEpic(3), taskManager.getAllEpics().get(1), "Эпики совпадают");
     }
 
     @Test
-    public void getSubtask() throws ManagerSaveException, IOException {
+    public void getSubtask() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 22, "2026-12-21T21:21:21");
         assertEquals(taskManager.getSubtask(2), taskManager.getAllSubTasks().get(2), "Не нашли подзадачу");
     }
 
     @Test
-    public void getSubtaskWrong() throws ManagerSaveException, IOException {
+    public void getSubtaskWrong() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 22, "2026-12-21T21:21:21");
         assertNotEquals(taskManager.getSubtask(3), taskManager.getAllSubTasks().get(2), "Нашли подзачачу");
     }
 
     @Test
-    public void getTask() throws ManagerSaveException, IOException {
+    public void getTask() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 22, "2026-12-21T21:21:21");
         assertEquals(taskManager.getTask(1), taskManager.getAllTasks().get(1), "Не нашли задачу");
     }
 
     @Test
-    public void getTaskWrong() throws ManagerSaveException, IOException {
+    public void getTaskWrong() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 22, "2026-12-21T21:21:21");
         assertNotEquals(taskManager.getTask(3), taskManager.getAllTasks().get(1), "Нашли задачу");
     }
-
 }

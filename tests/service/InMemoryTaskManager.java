@@ -22,7 +22,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    public void createTask() throws ManagerSaveException, IOException {
+    public void createTask() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 22, "2026-12-21T21:21:21");
 
         final Task savedTask = new Task("Задача№1", "ОписаниеЗадача№1", 1, Status.NEW, 22, "2026-12-21T21:21:21");
@@ -37,7 +37,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    public void createEpic() throws ManagerSaveException, IOException {
+    public void createEpic() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
 
         final Epic savedEpic = new Epic("Эпик1", "ОписаниеЭпик№1", 1, Status.NEW);
@@ -52,7 +52,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    public void createSubTask() throws ManagerSaveException, IOException {
+    public void createSubTask() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 22, "2026-12-21T21:21:21");
 
@@ -66,4 +66,30 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         assertEquals(1, subtasks.size(), "Неверное количество подзадач");
         assertEquals(savedSubtask, subtasks.get(2), "Подзадачи не совпали");
     }
+
+    @Test
+    public void updateTask() throws ManagerSaveException, IOException, InterruptedException {
+        taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 22, "2026-12-21T21:21:21");
+        final Task savedTask = new Task("Задача№1", "ОписаниеЗадача2", 1, Status.NEW, 22, "2026-12-21T21:21:21");
+        taskManager.updateTask(savedTask);
+        assertEquals("ОписаниеЗадача2", taskManager.getAllTasks().get(1).getDescription());
+    }
+
+    @Test
+    public void updateEpic() throws ManagerSaveException, IOException, InterruptedException {
+        taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
+        final Epic epic = new Epic("Задача№1", "ОписаниеЗадача2", 1, Status.NEW);
+        taskManager.updateEpic(epic);
+        assertEquals("ОписаниеЗадача2", taskManager.getAllEpics().get(1).getDescription());
+    }
+
+    @Test
+    public void updateSubtask() throws ManagerSaveException, IOException, InterruptedException {
+        taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
+        taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 22, "2026-12-21T21:21:21");
+        final Subtask savedSubtask = new Subtask("Подзадача1", "ОписаниеПодЗадача2", 2, Status.NEW, 1, 22, "2026-12-21T21:21:21");
+        taskManager.updateSubtask(savedSubtask);
+        assertEquals("ОписаниеПодЗадача2", taskManager.getAllSubTasks().get(2).getDescription());
+    }
+
 }

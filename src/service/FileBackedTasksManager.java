@@ -2,6 +2,8 @@ package service;
 
 import exceptions.ManagerReadException;
 import exceptions.ManagerSaveException;
+import model.Epic;
+import model.Subtask;
 import model.Task;
 import model.Type;
 
@@ -30,39 +32,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    @Override
-    public void createTask(String name, String description, int minutesToDo, String startTime) throws ManagerSaveException, IOException {
-        super.createTask(name, description, minutesToDo, startTime);
-        save();
-    }
-
-    @Override
-    public void createEpic(String name, String description) throws ManagerSaveException, IOException {
-        super.createEpic(name, description);
-        save();
-    }
-
-    @Override
-    public void createSubTask(String name, String description, int epicId, int minutesToDo, String startTime) throws ManagerSaveException, IOException {
-        super.createSubTask(name, description, epicId, minutesToDo, startTime);
-        save();
-    }
-
-    static String historyToString(HistoryManager manager) {
-        int commasToWrite = (manager.getHistoryHash().size() - 1);
-        int commasWritten = 0;
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Integer id : manager.getHistoryHash().keySet()) {
-            stringBuilder.append(id);
-            if (commasWritten < commasToWrite) {
-                stringBuilder.append(",");
-                commasWritten++;
-            }
-        }
-        return stringBuilder.toString();
-    }
-
-    public static void main(String[] args) throws ManagerSaveException, ManagerReadException, IOException {
+    public static void main(String[] args) throws ManagerSaveException, ManagerReadException, IOException, InterruptedException {
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(new File("history.txt"));
         fileBackedTasksManager.createTask("Задача№1", "ОписаниеЗадача№1", 30, "2021-12-21T21:21:21");
         FileBackedTasksManager.getHistoryManager().add(fileBackedTasksManager.getTask(1));
@@ -81,32 +51,60 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         System.out.println("test");
     }
 
-    public void save() throws ManagerSaveException, IOException {
+    static FileBackedTasksManager loadFromFile(File file) throws ManagerReadException, ManagerSaveException, IOException, InterruptedException {
+        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
+        fileBackedTasksManager.fromString(fileBackedTasksManager.readFile(file));
+        return fileBackedTasksManager;
+    }
 
-        try {
+    @Override
+    public void createTask(String name, String description, int duration, String startTime) throws ManagerSaveException, IOException, InterruptedException {
+        super.createTask(name, description, duration, startTime);
+        save();
+    }
 
-            File dir = new File(BASE_DIRECTORY);
-            dir.mkdir();
-            File historyFile = new File(dir, FILE_NAME);
+    @Override
+    public void createEpic(String name, String description) throws ManagerSaveException, IOException, InterruptedException {
+        super.createEpic(name, description);
+        save();
+    }
 
-            file = historyFile;
+    @Override
+    public void createSubTask(String name, String description, int epicId, int duration, String startTime) throws ManagerSaveException, IOException, InterruptedException {
+        super.createSubTask(name, description, epicId, duration, startTime);
+        save();
+    }
 
-            FileWriter fileWriter = new FileWriter(historyFile);
-            FileReader fileReader = new FileReader(historyFile);
-            BufferedReader br = new BufferedReader(fileReader);
+    @Override
+    public void updateTask(Task task) throws ManagerSaveException, IOException, InterruptedException {
+        super.updateTask(task);
+        save();
+    }
 
-            if (br.readLine() == null) {
-                fileWriter.write("id,type,name,status,description,epic,startTime,minutesToDo,endTime" + "\n");
+    static String historyToString(HistoryManager manager) {
+        int commasToWrite = (manager.getHistoryHash().size() - 1);
+        int commasWritten = 0;
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Integer id : manager.getHistoryHash().keySet()) {
+            stringBuilder.append(id);
+            if (commasWritten < commasToWrite) {
+                stringBuilder.append(",");
+                commasWritten++;
             }
-            for (Object task : getAllTypeTasks().values()) {
-                fileWriter.write(task.toString() + "\n");
-            }
-            fileWriter.write("\n");
-            fileWriter.write(historyToString((getHistoryManager())));
-            fileWriter.close();
-        } catch (IOException e) {
-            throw new ManagerSaveException("Ошибка во время сохранения");
         }
+        return stringBuilder.toString();
+    }
+
+    @Override
+    public void updateEpic(Epic epic) throws ManagerSaveException, IOException, InterruptedException {
+        super.updateTask(epic);
+        save();
+    }
+
+    @Override
+    public void updateSubtask(Subtask subtask) throws ManagerSaveException, IOException, InterruptedException {
+        super.updateTask(subtask);
+        save();
     }
 
     public List<Integer> getHistory() {
@@ -139,13 +137,35 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    static FileBackedTasksManager loadFromFile(File file) throws ManagerReadException, ManagerSaveException, IOException {
-        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
-        fileBackedTasksManager.fromString(fileBackedTasksManager.readFile(file));
-        return fileBackedTasksManager;
+    public void save() throws ManagerSaveException, IOException, InterruptedException {
+
+        try {
+
+            File dir = new File(BASE_DIRECTORY);
+            dir.mkdir();
+            File historyFile = new File(dir, FILE_NAME);
+
+            file = historyFile;
+
+            FileWriter fileWriter = new FileWriter(historyFile);
+            FileReader fileReader = new FileReader(historyFile);
+            BufferedReader br = new BufferedReader(fileReader);
+
+            if (br.readLine() == null) {
+                fileWriter.write("id,type,name,status,description,epic,startTime,duration,endTime" + "\n");
+            }
+            for (Object task : getAllTypeTasks().values()) {
+                fileWriter.write(task.toString() + "\n");
+            }
+            fileWriter.write("\n");
+            fileWriter.write(historyToString((getHistoryManager())));
+            fileWriter.close();
+        } catch (IOException e) {
+            throw new ManagerSaveException("Ошибка во время сохранения");
+        }
     }
 
-    public Task fromString(String value) throws ManagerSaveException, IOException {
+    public Task fromString(String value) throws ManagerSaveException, IOException, InterruptedException {
 
         String[] columns = value.split("\n");
         int columnsLength = columns.length;

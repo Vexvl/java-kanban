@@ -1,21 +1,18 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Epic extends Task {
+public class Epic extends Task implements Serializable {
 
     private List<Subtask> subtasks;
-
     private Type type = Type.EPIC;
-
     private int duration;
-
     private LocalDateTime endTime;
-
     private LocalDateTime startTime;
 
     public Epic(String name, String description, int id, Status status) {
@@ -51,16 +48,16 @@ public class Epic extends Task {
         return subtasks;
     }
 
+    public void setSubtasks(List<Subtask> subtasks) {
+        this.subtasks = subtasks;
+    }
+
     public void setEpicStatus(Status status) {
         this.status = status;
     }
 
     public Status getEpicStatus() {
         return status;
-    }
-
-    public int getEpicId() {
-        return id;
     }
 
     @Override

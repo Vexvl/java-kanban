@@ -14,13 +14,13 @@ public class EpicTest {
     private TaskManager taskManager = new InMemoryTaskManager();
 
     @Test
-    public void shallReturnNoSubtasks() throws ManagerSaveException, IOException {
+    public void shallReturnNoSubtasks() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         assertEquals(0, taskManager.getEpicById(1).getSubtasks().size());
     }
 
     @Test
-    public void statusInProgressOfEpicWhenEverySubtaskIsNew() throws ManagerSaveException, IOException {
+    public void statusInProgressOfEpicWhenEverySubtaskIsNew() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 3, "2029-12-21T21:21:21");
         taskManager.createSubTask("Подзадача2", "ОписаниеПодзадача2", 1, 5, "2029-12-21T21:21:21");
@@ -29,7 +29,7 @@ public class EpicTest {
     }
 
     @Test
-    public void statusDoneOfEpicWhenEverySubtaskIsDone() throws ManagerSaveException, IOException {
+    public void statusDoneOfEpicWhenEverySubtaskIsDone() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 3, "2029-12-21T21:21:21");
         taskManager.createSubTask("Подзадача2", "ОписаниеПодзадача2", 1, 5, "2029-12-21T21:21:21");
@@ -40,7 +40,7 @@ public class EpicTest {
     }
 
     @Test
-    public void statusInProgressOfEpic() throws ManagerSaveException, IOException {
+    public void statusInProgressOfEpic() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 3, "2029-12-21T21:21:21");
         taskManager.createSubTask("Подзадача2", "ОписаниеПодзадача2", 1, 5, "2029-12-21T21:21:21");
@@ -49,7 +49,7 @@ public class EpicTest {
     }
 
     @Test
-    public void statusOfEpicWhenEverySubtaskIsInProgress() throws ManagerSaveException, IOException {
+    public void statusOfEpicWhenEverySubtaskIsInProgress() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 3, "2029-12-21T21:21:21");
         taskManager.createSubTask("Подзадача2", "ОписаниеПодзадача2", 1, 5, "2029-12-21T21:21:21");

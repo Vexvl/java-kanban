@@ -1,18 +1,18 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Subtask extends Task {
+public class Subtask extends Task implements Serializable {
 
     private final int epicId;
-
     private boolean isSubtask = true;
     private int duration;
-
     private LocalDateTime endTime;
     private LocalDateTime startTime;
     private Type type = Type.SUBTASK;
+
     public Subtask(String name, String description, int id, Status status, int epicId, int duration, String startTime) {
         super(name, description, id, status, duration, startTime);
         this.name = name;
@@ -44,12 +44,15 @@ public class Subtask extends Task {
     public int getEpicId() {
         return epicId;
     }
-    public String getDescription(){
+
+    public String getDescription() {
         return description;
     }
-    public String getName(){
+
+    public String getName() {
         return name;
     }
+
     @Override
     public String toString() {
         return id + "," + type + "," + name + "," + status + "," + description + "," + epicId + "," + startTime + "," + duration + "," + endTime;
@@ -65,7 +68,7 @@ public class Subtask extends Task {
         }
         Subtask subtask = (Subtask) obj;
 
-        return Objects.equals(name, subtask.name) && Objects.equals(description, subtask.description) && Objects.equals(id, subtask.id) && Objects.equals(type, subtask.type) && Objects.equals(status, subtask.status) && Objects.equals(duration, subtask.duration)&& Objects.equals(startTime, subtask.startTime) && Objects.equals(endTime, subtask.endTime) && Objects.equals(epicId, subtask.epicId);
+        return Objects.equals(name, subtask.name) && Objects.equals(description, subtask.description) && Objects.equals(id, subtask.id) && Objects.equals(type, subtask.type) && Objects.equals(status, subtask.status) && Objects.equals(duration, subtask.duration) && Objects.equals(startTime, subtask.startTime) && Objects.equals(endTime, subtask.endTime) && Objects.equals(epicId, subtask.epicId);
 
     }
 }

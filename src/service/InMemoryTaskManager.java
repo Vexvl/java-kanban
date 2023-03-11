@@ -7,6 +7,7 @@ import model.Epic;
 import model.Status;
 import model.Subtask;
 import model.Task;
+import server.KVTaskClient;
 
 import java.io.IOException;
 import java.util.*;
@@ -15,38 +16,68 @@ public class InMemoryTaskManager implements TaskManager {
 
     private int id = 1;
 
-    private Set<Task> orderedTasks = new TreeSet<>(new PriorityComparator<Task>());
-    private Map<Integer, Task> tasks = new HashMap<>();
-    private Map<Integer, Epic> epics = new HashMap<>();
-    private Map<Integer, Subtask> subTasks = new HashMap<>();
-    private Map<Integer, Task> allTasks = new HashMap<>();
+    protected Set<Task> orderedTasks = new TreeSet<>(new PriorityComparator<Task>());
+    protected Map<Integer, Task> tasks = new HashMap<>();
+    protected Map<Integer, Epic> epics = new HashMap<>();
+    protected Map<Integer, Subtask> subTasks = new HashMap<>();
+    protected Map<Integer, Task> allTasks = new HashMap<>();
 
     protected static HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
-    public void createTask(String name, String description, int duration, String startTime) throws ManagerSaveException, IOException {
+    public void createTask(String name, String description, int duration, String startTime) throws ManagerSaveException, IOException, InterruptedException {
         Task task = new Task(name, description, id, Status.NEW, duration, startTime);
         tasks.put(id, task);
         allTasks.put(id, task);
+        if (!historyManager.getHistory().contains(task)) {
+            historyManager.add(task);
+        }
         id++;
     }
 
     @Override
-    public void createEpic(String name, String description) throws ManagerSaveException, IOException {
+    public void createEpic(String name, String description) throws ManagerSaveException, IOException, InterruptedException {
         Epic epic = new Epic(name, description, id, Status.NEW);
         epics.put(id, epic);
         allTasks.put(id, epic);
+        if (!historyManager.getHistory().contains(epic)) {
+            historyManager.add(epic);
+        }
         id++;
     }
 
     @Override
-    public void createSubTask(String name, String description, int epicId, int duration, String startTime) throws ManagerSaveException, IOException {
+    public void createSubTask(String name, String description, int epicId, int duration, String startTime) throws ManagerSaveException, IOException, InterruptedException {
         Subtask subtask = new Subtask(name, description, id, Status.NEW, epicId, duration, startTime);
         subTasks.put(id, subtask);
         allTasks.put(id, subtask);
         epics.get(epicId).getSubtasks().add(subtask);
         epics.get(epicId).calculateDuration();
+        if (!historyManager.getHistory().contains(subtask)) {
+            historyManager.add(subtask);
+        }
         id++;
+    }
+
+    @Override
+    public void updateTask(Task task) throws ManagerSaveException, IOException, InterruptedException {
+        if (tasks.containsKey(task.getIdOfTask())) {
+            tasks.put(task.getIdOfTask(), task);
+        }
+    }
+
+    @Override
+    public void updateEpic(Epic epic) throws ManagerSaveException, IOException, InterruptedException {
+        if (epics.containsKey(epic.getIdOfTask())) {
+            epics.put(epic.getIdOfTask(), epic);
+        }
+    }
+
+    @Override
+    public void updateSubtask(Subtask subtask) throws ManagerSaveException, IOException, InterruptedException {
+        if (subTasks.containsKey(subtask.getIdOfTask())) {
+            subTasks.put(subtask.getIdOfTask(), subtask);
+        }
     }
 
 
@@ -56,7 +87,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Map<Integer,Epic> getAllEpics() {
+    public Map<Integer, Epic> getAllEpics() {
         return epics;
     }
 
@@ -104,6 +135,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) {
         return tasks.get(id);
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 
     @Override
@@ -181,9 +217,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public boolean IfIntersection(Task task) throws IntersectionException {
-        if (task.getLocalDateTime().isBefore(allTasks.get(task.getIdOfTask()-1).getEndTime())) {
+        if (task.getLocalDateTime().isBefore(allTasks.get(task.getIdOfTask() - 1).getEndTime())) {
             throw new IntersectionException("Присутствует пересечение времени задач");
         }
         return false;
+    }
+
+    @Override
+    public KVTaskClient getKVClient() throws IOException, InterruptedException {
+        return new KVTaskClient("http://localhost:8078");
     }
 }

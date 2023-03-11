@@ -37,7 +37,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         BufferedReader br = new BufferedReader(fileReader);
 
         if (br.readLine() == null) {
-            fileWriter.write("id,type,name,status,description,epic,startTime,minutesToDo,endTime" + "\n");
+            fileWriter.write("id,type,name,status,description,epic,startTime,duration,endTime" + "\n");
         }
 
         for (Task task : tasks) {
@@ -50,7 +50,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     }
 
     @Test
-    public void createTask() throws ManagerSaveException, IOException, ManagerReadException {
+    public void createTask() throws ManagerSaveException, IOException, ManagerReadException, InterruptedException {
         List<Task> tasks = new ArrayList<>();
         taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 30, "2021-12-21T21:21:21");
         tasks.add(taskManager.getTask(1));
@@ -61,7 +61,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     }
 
     @Test
-    public void createEpic() throws ManagerSaveException, IOException, ManagerReadException {
+    public void createEpic() throws ManagerSaveException, IOException, ManagerReadException, InterruptedException {
         List<Task> tasks = new ArrayList<>();
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         tasks.add(taskManager.getEpic(1));
@@ -72,7 +72,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     }
 
     @Test
-    public void createSubtask() throws ManagerSaveException, IOException, ManagerReadException {
+    public void createSubtask() throws ManagerSaveException, IOException, ManagerReadException, InterruptedException {
         List<Task> tasks = new ArrayList<>();
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         taskManager.createSubTask("Подзадача1", "ОписаниеПодзадача1", 1, 3, "2056-12-21T21:21:21");
@@ -85,7 +85,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
 
 
     @Test
-    public void save() throws IOException, ManagerReadException, ManagerSaveException {
+    public void save() throws IOException, ManagerReadException, ManagerSaveException, InterruptedException {
         List<Task> tasks = new ArrayList<>();
         taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 1, "2029-12-21T21:21:21");
         taskManager.createTask("Задача№2", "ОписаниеЗадача№1", 2, "2029-12-21T21:21:21");
@@ -105,7 +105,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     }
 
     @Test
-    public void testEmptyTasks() throws ManagerReadException, ManagerSaveException, IOException {
+    public void testEmptyTasks() throws ManagerReadException, ManagerSaveException, IOException, InterruptedException {
         List<Task> tasks = new ArrayList<>();
         taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 30, "2021-12-21T21:21:21");
         tasks.add(taskManager.getTask(1));
@@ -117,7 +117,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     }
 
     @Test
-    public void testEpicWithoutSubtasks() throws ManagerReadException, ManagerSaveException, IOException {
+    public void testEpicWithoutSubtasks() throws ManagerReadException, ManagerSaveException, IOException, InterruptedException {
         List<Task> tasks = new ArrayList<>();
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         tasks.add(taskManager.getEpic(1));
@@ -129,7 +129,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     }
 
     @Test
-    public void emptyHistory() throws ManagerReadException, ManagerSaveException, IOException {
+    public void emptyHistory() throws ManagerReadException, ManagerSaveException, IOException, InterruptedException {
         List<Task> tasks = new ArrayList<>();
         taskManager.createEpic("Эпик1", "ОписаниеЭпик№1");
         tasks.add(taskManager.getEpic(1));

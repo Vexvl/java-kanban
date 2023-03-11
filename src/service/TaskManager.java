@@ -5,6 +5,7 @@ import exceptions.ManagerSaveException;
 import model.Epic;
 import model.Subtask;
 import model.Task;
+import server.KVTaskClient;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,11 +14,19 @@ import java.util.Set;
 
 public interface TaskManager {
 
-    void createTask(String name, String description, int duration, String startTime) throws ManagerSaveException, IOException;
+    void createTask(String name, String description, int duration, String startTime) throws ManagerSaveException, IOException, InterruptedException;
 
-    void createEpic(String name, String description) throws ManagerSaveException, IOException;
+    void createEpic(String name, String description) throws ManagerSaveException, IOException, InterruptedException;
 
-    void createSubTask(String name, String description, int epicId, int duration, String startTime) throws ManagerSaveException, IOException;
+    void createSubTask(String name, String description, int epicId, int duration, String startTime) throws ManagerSaveException, IOException, InterruptedException;
+
+    int getId();
+
+    void updateTask(Task task) throws ManagerSaveException, IOException, InterruptedException;
+
+    void updateEpic(Epic epic) throws ManagerSaveException, IOException, InterruptedException;
+
+    void updateSubtask(Subtask subtask) throws ManagerSaveException, IOException, InterruptedException;
 
     Map<Integer, Task> getAllTypeTasks();
 
@@ -55,4 +64,5 @@ public interface TaskManager {
 
     boolean IfIntersection(Task task) throws IntersectionException;
 
+    KVTaskClient getKVClient() throws IOException, InterruptedException;
 }
