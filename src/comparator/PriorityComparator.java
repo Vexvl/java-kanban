@@ -1,4 +1,4 @@
-package comparators;
+package comparator;
 
 import model.Task;
 

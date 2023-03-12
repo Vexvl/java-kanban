@@ -17,6 +17,7 @@ import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HttpTaskManager extends FileBackedTasksManager {
 
@@ -37,31 +38,27 @@ public class HttpTaskManager extends FileBackedTasksManager {
         String jsonSubtasks = client.load("subtasks");
         String jsonHistory = client.load("history");
 
-        Type mapType = new TypeToken<HashMap<Integer, Task>>() {
-        }.getType();
-        HashMap<Integer, Task> tasksRecover = gson.fromJson(jsonTasks, mapType);
+        Type mapType = new TypeToken<Map<Integer, Task>>() {}.getType();
+        Map<Integer, Task> tasksRecover = gson.fromJson(jsonTasks, mapType);
         for (Integer key : tasksRecover.keySet()) {
             taskManager.tasks.put(key, tasksRecover.get(key));
         }
 
-        mapType = new TypeToken<HashMap<Integer, Epic>>() {
-        }.getType();
-        HashMap<Integer, Epic> epicsRecover = gson.fromJson(jsonEpics, mapType);
+        mapType = new TypeToken<Map<Integer, Epic>>() {}.getType();
+        Map<Integer, Epic> epicsRecover = gson.fromJson(jsonEpics, mapType);
         for (Integer key : epicsRecover.keySet()) {
             taskManager.epics.put(key, epicsRecover.get(key));
         }
 
-        mapType = new TypeToken<HashMap<Integer, Subtask>>() {
-        }.getType();
-        HashMap<Integer, Subtask> subtasksRecover = gson.fromJson(jsonSubtasks, mapType);
+        mapType = new TypeToken<Map<Integer, Subtask>>() {}.getType();
+        Map<Integer, Subtask> subtasksRecover = gson.fromJson(jsonSubtasks, mapType);
         for (Integer key : subtasksRecover.keySet()) {
             taskManager.subTasks.put(key, subtasksRecover.get(key));
         }
 
-        Type listType = new TypeToken<List<Task>>() {
-        }.getType();
+        Type listType = new TypeToken<List<Task>>() {}.getType();
         List<Task> historyRecover = gson.fromJson(jsonHistory, listType);
-        HashMap<Integer, Task> allTasks = new HashMap<>(taskManager.tasks);
+        Map<Integer, Task> allTasks = new HashMap<>(taskManager.tasks);
         allTasks.putAll(taskManager.epics);
         allTasks.putAll(taskManager.subTasks);
         historyRecover.forEach(task -> historyManager.add(allTasks.get(task.getIdOfTask())));

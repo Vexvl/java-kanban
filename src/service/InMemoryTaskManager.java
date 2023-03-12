@@ -1,6 +1,6 @@
 package service;
 
-import comparators.PriorityComparator;
+import comparator.PriorityComparator;
 import exceptions.IntersectionException;
 import exceptions.ManagerSaveException;
 import model.Epic;

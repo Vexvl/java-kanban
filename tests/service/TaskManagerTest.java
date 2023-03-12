@@ -29,7 +29,6 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(3, taskManager.getAllTypeTasks().size(), "Неверное количество задач");
     }
 
-
     @Test
     public void getAllTypeTasksNull() throws ManagerSaveException, IOException, InterruptedException {
         taskManager.createTask("Задача№1", "ОписаниеЗадача№1", 22, "2026-12-21T21:21:21");
@@ -148,7 +147,6 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertNotNull(taskManager.getAllEpics(), "Метод удаления работает неправильно");
         assertNotEquals(id, taskManager.getAllEpics().size(), "Количество эпиков не совпадает");
     }
-
 
     @Test
     public void deleteAll() throws ManagerSaveException, IOException, InterruptedException {

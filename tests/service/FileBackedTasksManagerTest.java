@@ -83,7 +83,6 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         assertEquals(taskManager.getSubTaskById(1), fileBackedTasksManager.getSubtask(1));
     }
 
-
     @Test
     public void save() throws IOException, ManagerReadException, ManagerSaveException, InterruptedException {
         List<Task> tasks = new ArrayList<>();

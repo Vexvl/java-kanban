@@ -49,7 +49,6 @@ public class HttpTaskServerTest {
         requestBuilder = HttpRequest.newBuilder().uri(URI.create("http://localhost:8090"));
     }
 
-
     @Test
     public void testGetAllTasks() throws IOException, InterruptedException {
         Task savedTask = new Task("Задача№1", "ОписаниеЗадача№1", 1, Status.NEW, 22, "2026-12-21T21:21:21");
@@ -174,7 +173,6 @@ public class HttpTaskServerTest {
         assertNotEquals(2, response.body().length());
     }
 
-
     @Test
     public void testGetHistory() throws IOException, InterruptedException {
         Task task = new Task("Задача№1", "ОписаниеЗадача№1", 1, Status.NEW, 1, "2029-12-21T21:21:21");
@@ -194,7 +192,6 @@ public class HttpTaskServerTest {
 
         assertEquals(200, response.statusCode());
     }
-
 
     @Test
     public void testDeleteTaskByID() throws IOException, InterruptedException {

@@ -31,6 +31,7 @@ public class HttpTaskServer {
     private final FileBackedTasksManager tasksManager;
     private final HttpServer server;
     private final Gson gson;
+    private static final int SECOND_PARAMETR_IN_REQUESTED_URL_INDEX = 2;
 
     public HttpTaskServer() throws IOException {
         server = HttpServer.create();
@@ -58,7 +59,7 @@ public class HttpTaskServer {
         String bodyJson = new String(inputStream.readAllBytes(), UTF_8);
         String urlToString = httpExchange.getRequestURI().toString();
         String[] splitUrl = urlToString.split("/");
-        switch (splitUrl[2]) {
+        switch (splitUrl[SECOND_PARAMETR_IN_REQUESTED_URL_INDEX]) {
             case "task":
                 Task task = gson.fromJson(bodyJson, Task.class);
                 if (tasksManager.getAllTasks().containsKey(task.getIdOfTask())) {
@@ -107,7 +108,7 @@ public class HttpTaskServer {
             return;
         }
 
-        switch (splitUrl[2]) {
+        switch (splitUrl[SECOND_PARAMETR_IN_REQUESTED_URL_INDEX]) {
 
             case "task":
                 getTask(id, httpExchange);
@@ -124,10 +125,6 @@ public class HttpTaskServer {
                 writeResponse(httpExchange, responseHistory, 200);
                 break;
         }
-    }
-
-    private void handleDelets(HttpExchange httpExchange) {
-        System.out.println("DD");
     }
 
     private void writeResponse(HttpExchange httpExchange, String responseString, int responseCode) throws IOException {
@@ -167,7 +164,7 @@ public class HttpTaskServer {
         }
     }
 
-    private void delete(HttpExchange httpExchange) throws IOException {
+    private void handleDelete(HttpExchange httpExchange) throws IOException {
         String url = httpExchange.getRequestURI().toString();
         String[] splitURL = url.split("/");
 
@@ -180,7 +177,7 @@ public class HttpTaskServer {
         if (httpExchange.getRequestURI().getRawQuery().contains("id=")) {
             String idString = httpExchange.getRequestURI().getRawQuery().substring("id=".length());
             int id = parseInt(idString);
-            switch (splitURL[2]) {
+            switch (splitURL[SECOND_PARAMETR_IN_REQUESTED_URL_INDEX]) {
                 case "task":
                     tasksManager.deleteTaskById(id);
                     writeResponse(httpExchange, "Удалено " + id, 200);
@@ -228,7 +225,7 @@ public class HttpTaskServer {
                         break;
                     case "DELETE":
                         System.out.println("\nОбработка DELETE-запроса");
-                        delete(httpExchange);
+                        handleDelete(httpExchange);
                         writeResponse(httpExchange, "Успешно", 200);
                         break;
                     default:
