@@ -1,7 +1,6 @@
-import exceptions.IntersectionException;
-import exceptions.ManagerSaveException;
+import exception.IntersectionException;
+import exception.ManagerSaveException;
 import model.Task;
-import server.HttpTaskServer;
 import service.HistoryManager;
 import service.Managers;
 import service.TaskManager;

@@ -1,7 +1,7 @@
 package service;
 
-import exceptions.IntersectionException;
-import exceptions.ManagerSaveException;
+import exception.IntersectionException;
+import exception.ManagerSaveException;
 import model.Epic;
 import model.Subtask;
 import model.Task;

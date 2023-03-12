@@ -1,8 +1,8 @@
 package service;
 
 import comparator.PriorityComparator;
-import exceptions.IntersectionException;
-import exceptions.ManagerSaveException;
+import exception.IntersectionException;
+import exception.ManagerSaveException;
 import model.Epic;
 import model.Status;
 import model.Subtask;

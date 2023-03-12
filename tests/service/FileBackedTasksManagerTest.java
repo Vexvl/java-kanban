@@ -1,7 +1,7 @@
 package service;
 
-import exceptions.ManagerReadException;
-import exceptions.ManagerSaveException;
+import exception.ManagerReadException;
+import exception.ManagerSaveException;
 import model.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

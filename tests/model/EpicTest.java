@@ -1,6 +1,6 @@
 package model;
 
-import exceptions.ManagerSaveException;
+import exception.ManagerSaveException;
 import org.junit.jupiter.api.Test;
 import service.InMemoryTaskManager;
 import service.TaskManager;
